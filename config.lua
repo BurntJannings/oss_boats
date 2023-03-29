@@ -12,9 +12,6 @@ Config.optionKey = 0xF1301666 --[O] opens menu for anchor and remote return whil
 -- Return Boat to Shop at Prompt
 Config.returnKey = 0xD9D0E1C0 --[spacebar]
 
--- Allow to Transfer Boats
-Config.transferAllow = true -- If true, Boats Can Be Transferred To Different Shops
-
 -- Block NPC Boat Spawns
 Config.blockNpcBoats = true -- If true, will block the spawning of NPC boats
 

@@ -2,9 +2,10 @@ local VORPcore = {}
 TriggerEvent("getCore", function(core)
     VORPcore = core
 end)
+
 -- Buy New Boats
 RegisterServerEvent('oss_boats:BuyBoat')
-AddEventHandler('oss_boats:BuyBoat', function(buyData, location)
+AddEventHandler('oss_boats:BuyBoat', function(buyData)
     local _source = source
     local Character = VORPcore.getUser(_source).getUsedCharacter
     local identifier = Character.identifier
@@ -32,18 +33,19 @@ AddEventHandler('oss_boats:BuyBoat', function(buyData, location)
             return
         end
     end
-    MySQL.Async.execute('INSERT INTO boats (identifier, charid, name, model, location) VALUES (?, ?, ?, ?, ?)', {identifier, charid, name, model, location},
+    MySQL.Async.execute('INSERT INTO boats (identifier, charid, name, model) VALUES (?, ?, ?, ?)', {identifier, charid, name, model},
     function(done)
     end)
 end)
+
 -- Get List of Owned Boats
 RegisterServerEvent('oss_boats:GetOwnedBoats')
-AddEventHandler('oss_boats:GetOwnedBoats', function(location, shopId)
+AddEventHandler('oss_boats:GetOwnedBoats', function(shopId)
     local _source = source
     local Character = VORPcore.getUser(_source).getUsedCharacter
     local identifier = Character.identifier
     local charid = Character.charIdentifier
-    MySQL.Async.fetchAll('SELECT * FROM boats WHERE identifier = ? AND charid = ? AND location = ?', {identifier, charid, location},
+    MySQL.Async.fetchAll('SELECT * FROM boats WHERE identifier = ? AND charid = ?', {identifier, charid},
     function(result)
         if result[1] then
             TriggerClientEvent("oss_boats:OwnedBoatsMenu", _source, result, shopId)
@@ -52,6 +54,7 @@ AddEventHandler('oss_boats:GetOwnedBoats', function(location, shopId)
         end
     end)
 end)
+
 -- Sell Owned Boats
 RegisterServerEvent('oss_boats:SellBoat')
 AddEventHandler('oss_boats:SellBoat', function(ownedData, boatData)
@@ -61,7 +64,6 @@ AddEventHandler('oss_boats:SellBoat', function(ownedData, boatData)
     local charid = Character.charIdentifier
     local name = ownedData.name
     local model = ownedData.model
-    local location = ownedData.location
     local sellPrice = boatData.sellPrice
     local currencyType = boatData.currencyType
     if currencyType == "cash" then
@@ -71,47 +73,11 @@ AddEventHandler('oss_boats:SellBoat', function(ownedData, boatData)
         Character.addCurrency(1, sellPrice)
         VORPcore.NotifyRightTip(_source, _U("sold") .. name .. _U("fr") .. sellPrice .. _U("ofgold"), 5000)
     end
-    MySQL.Async.execute('DELETE FROM boats WHERE identifier = ? AND charid = ? AND location = ? AND name = ? AND model = ? LIMIT 1', {identifier, charid, location, name, model},
+    MySQL.Async.execute('DELETE FROM boats WHERE identifier = ? AND charid = ? AND name = ? AND model = ? LIMIT 1', {identifier, charid, name, model},
     function(done)
     end)
 end)
--- Transfer Owned Boats Between Shops
-RegisterServerEvent('oss_boats:TransferBoat')
-AddEventHandler('oss_boats:TransferBoat', function(ownedData, transferLocation, menuTransfer, boatData, shopName)
-    local _source = source
-    local Character = VORPcore.getUser(_source).getUsedCharacter
-    local identifier = Character.identifier
-    local charid = Character.charIdentifier
-    local name = ownedData.name
-    local model = ownedData.model
-    local location = ownedData.location
-    if menuTransfer then
-        local currencyType = boatData.currencyType
-        local transferPrice = boatData.transferPrice
-        if currencyType == "cash" then
-            local money = Character.money
-            if money >= transferPrice then
-                Character.removeCurrency(0, transferPrice)
-                VORPcore.NotifyRightTip(_source, _U("transferred") .. name .. _U("to") .. shopName .. _U("frcash") .. transferPrice, 5000)
-            else
-                VORPcore.NotifyRightTip(_source, _U("shortCash"), 5000)
-                return
-            end
-        elseif currencyType == "gold" then
-            local gold = Character.gold
-            if gold >= transferPrice then
-                Character.removeCurrency(1, transferPrice)
-                VORPcore.NotifyRightTip(_source, _U("transferred") .. name .. _U("to") .. shopName .. _U("fr") .. transferPrice .. _U("ofgold"), 5000)
-            else
-                VORPcore.NotifyRightTip(_source, _U("shortGold"), 5000)
-                return
-            end
-        end
-    end
-    MySQL.Async.execute('UPDATE boats SET location = ? WHERE identifier = ? AND charid = ? AND location = ? AND name = ? AND model = ? LIMIT 1', {transferLocation, identifier, charid, location, name, model},
-    function(done)
-    end)
-end)
+
 -- Prevent NPC Boat Spawns
 if Config.blockNpcBoats then
     AddEventHandler('entityCreating', function(entity)
@@ -124,6 +90,7 @@ if Config.blockNpcBoats then
         end
     end)
 end
+
 -- Check Player Job and Job Grade
 RegisterServerEvent('oss_boats:getPlayerJob')
 AddEventHandler('oss_boats:getPlayerJob', function()

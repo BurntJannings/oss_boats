@@ -12,11 +12,11 @@ Config.optionKey = 0xF1301666 --[O] opens menu for anchor and remote return whil
 -- Return Boat to Shop at Prompt
 Config.returnKey = 0xD9D0E1C0 --[spacebar]
 
--- Allow to Transfer Boats
-Config.transferAllow = true -- If true, Boats Can Be Transferred To Different Shops
-
 -- Block NPC Boat Spawns
 Config.blockNpcBoats = true -- If true, will block the spawning of NPC boats
+
+-- Limit Number of Boats per Player
+Config.maxBoats = 2 -- Default: 10
 
 -- Show or Remove Blip when Closed
 Config.blipAllowedClosed = true -- If true, will show colored blip when shop is closed
@@ -25,7 +25,6 @@ Config.blipAllowedClosed = true -- If true, will show colored blip when shop is 
 Config.boatShops = {
     lagras = {
         shopName = "Lagras Boats", -- Name of Shop on Menu
-        location = "lagras", -- DON'T CHANGE / Used for Location in Database
         promptName = "Lagras Boats", -- Text Below the Prompt Button
         blipAllowed = true, -- Turns Blips On / Off
         blipName = "Lagras Boats", -- Name of the Blip on the Map
@@ -36,6 +35,7 @@ Config.boatShops = {
         npcx = 2123.95, npcy = -551.63, npcz = 41.53, npch = 113.62, -- Blip and NPC Positions
         boatx = 2122.8, boaty = -544.76, boatz = 40.55, boath = 46.69, -- Boat Spawn and Return Positions
         playerx = 2121.31, playery = -552.65, playerz = 42.7, playerh = 316.34, -- Player Return Teleport Position
+        boatCamx = 2123.95, boatCamy = -551.63, boatCamz = 41.53, -- Camera Location to View Boat When In-Menu
         distanceShop = 2.0, -- Distance from NPC to Get Menu Prompt
         distanceReturn = 6.0, -- Distance from Shop to Get Return Prompt
         npcAllowed = true, -- Turns NPCs On / Off
@@ -45,20 +45,28 @@ Config.boatShops = {
         shopHours = false, -- If You Want the Shops to Use Open and Closed Hours
         shopOpen = 7, -- Shop Open Time / 24 Hour Clock
         shopClose = 21, -- Shop Close Time / 24 Hour Clock
-        boats = { -- Change ONLY These Values: boatName, currencyType, buyPrice, sellPrice and transferPrice
-            canoetreetrunk = { boatName = "Dugout Canoe",   boatModel = "canoetreetrunk", currencyType = "cash", buyPrice = 25,   sellPrice = 15,  transferPrice = 5  },
-            canoe          = { boatName = "Canoe",          boatModel = "canoe",          currencyType = "cash", buyPrice = 40,   sellPrice = 25,  transferPrice = 5  },
-            pirogue        = { boatName = "Pirogue Canoe",  boatModel = "pirogue",        currencyType = "cash", buyPrice = 50,   sellPrice = 30,  transferPrice = 5  },
-            pirogue2       = { boatName = "Pirogue2 Canoe", boatModel = "pirogue2",       currencyType = "cash", buyPrice = 50,   sellPrice = 30,  transferPrice = 5  },
-            rowboat        = { boatName = "Rowboat",        boatModel = "rowboat",        currencyType = "cash", buyPrice = 100,  sellPrice = 70,  transferPrice = 10 },
-            rowboatSwamp   = { boatName = "Swamp Rowboat",  boatModel = "rowboatSwamp",   currencyType = "cash", buyPrice = 100,  sellPrice = 70,  transferPrice = 10 },
-            keelboat       = { boatName = "Keelboat",       boatModel = "keelboat",       currencyType = "cash", buyPrice = 800,  sellPrice = 600, transferPrice = 20 },
-            boatsteam02x   = { boatName = "Steamboat",      boatModel = "boatsteam02x",   currencyType = "cash", buyPrice = 1200, sellPrice = 900, transferPrice = 20 },
+        boats = { -- Change ONLY These Values: boatType, label, cashPrice, goldPrice and sellPrice
+            {
+                boatType = "Canoes",
+                ["canoetreetrunk"] = { label = "Dugout Canoe",  cashPrice = 25,   goldPrice = 1,  sellPrice = 15,  },
+                ["canoe"]          = { label = "Canoe",         cashPrice = 45,   goldPrice = 2,  sellPrice = 25,  },
+                ["pirogue"]        = { label = "Pirogue Canoe", cashPrice = 60,   goldPrice = 3,  sellPrice = 35,  },
+            },
+            {
+                boatType = "Rowboats",
+                ["skiff"]          = { label = "Skiff",         cashPrice = 100,  goldPrice = 5,  sellPrice = 60,  },
+                ["rowboat"]        = { label = "Rowboat",       cashPrice = 150,  goldPrice = 7,  sellPrice = 90,  },
+                ["rowboatSwamp"]   = { label = "Swamp Rowboat", cashPrice = 125,  goldPrice = 6,  sellPrice = 75,  },
+            },
+            {
+                boatType = "Steamboats",
+                ["boatsteam02x"]   = { label = "Steamboat",     cashPrice = 550,  goldPrice = 25, sellPrice = 330, },
+                ["keelboat"]       = { label = "Keelboat",      cashPrice = 800,  goldPrice = 40, sellPrice = 480, },
+            },
         },
     },
     saintdenis = {
         shopName = "Saint Denis Boats",
-        location = "saintdenis", -- DON'T CHANGE
         promptName = "Saint Denis Boats",
         blipAllowed = true,
         blipName = "Saint Denis Boats",
@@ -69,6 +77,7 @@ Config.boatShops = {
         npcx = 2949.77, npcy = -1250.18, npcz = 41.411, npch = 95.39,
         boatx = 2947.50, boaty = -1257.21, boatz = 41.58, boath = 274.14,
         playerx = 2946.99, playery = -1250.47, playerz = 42.41, playerh = 270.52,
+        boatCamx = 2949.77, boatCamy = -1250.18, boatCamz = 41.411,
         distanceShop = 2.0,
         distanceReturn = 6.0,
         npcAllowed = true,
@@ -79,19 +88,27 @@ Config.boatShops = {
         shopOpen = 7,
         shopClose = 21,
         boats = {
-            canoetreetrunk = { boatName = "Dugout Canoe",   boatModel = "canoetreetrunk", currencyType = "cash", buyPrice = 25,   sellPrice = 15,  transferPrice = 5  },
-            canoe          = { boatName = "Canoe",          boatModel = "canoe",          currencyType = "cash", buyPrice = 40,   sellPrice = 25,  transferPrice = 5  },
-            pirogue        = { boatName = "Pirogue Canoe",  boatModel = "pirogue",        currencyType = "cash", buyPrice = 50,   sellPrice = 30,  transferPrice = 5  },
-            pirogue2       = { boatName = "Pirogue2 Canoe", boatModel = "pirogue2",       currencyType = "cash", buyPrice = 50,   sellPrice = 30,  transferPrice = 5  },
-            rowboat        = { boatName = "Rowboat",        boatModel = "rowboat",        currencyType = "cash", buyPrice = 100,  sellPrice = 70,  transferPrice = 10 },
-            rowboatSwamp   = { boatName = "Swamp Rowboat",  boatModel = "rowboatSwamp",   currencyType = "cash", buyPrice = 100,  sellPrice = 70,  transferPrice = 10 },
-            keelboat       = { boatName = "Keelboat",       boatModel = "keelboat",       currencyType = "cash", buyPrice = 800,  sellPrice = 600, transferPrice = 20 },
-            boatsteam02x   = { boatName = "Steamboat",      boatModel = "boatsteam02x",   currencyType = "cash", buyPrice = 1200, sellPrice = 900, transferPrice = 20 },
+            {
+                boatType = "Canoes",
+                ["canoetreetrunk"] = { label = "Dugout Canoe",  cashPrice = 25,   goldPrice = 1,  sellPrice = 15,  },
+                ["canoe"]          = { label = "Canoe",         cashPrice = 45,   goldPrice = 2,  sellPrice = 25,  },
+                ["pirogue"]        = { label = "Pirogue Canoe", cashPrice = 60,   goldPrice = 3,  sellPrice = 35,  },
+            },
+            {
+                boatType = "Rowboats",
+                ["skiff"]          = { label = "Skiff",         cashPrice = 100,  goldPrice = 5,  sellPrice = 60,  },
+                ["rowboat"]        = { label = "Rowboat",       cashPrice = 150,  goldPrice = 7,  sellPrice = 90,  },
+                ["rowboatSwamp"]   = { label = "Swamp Rowboat", cashPrice = 125,  goldPrice = 6,  sellPrice = 75,  },
+            },
+            {
+                boatType = "Steamboats",
+                ["boatsteam02x"]   = { label = "Steamboat",     cashPrice = 550,  goldPrice = 25, sellPrice = 330, },
+                ["keelboat"]       = { label = "Keelboat",      cashPrice = 800,  goldPrice = 40, sellPrice = 480, },
+            },
         },
     },
     annesburg = {
         shopName = "Annesburg Boats",
-        location = "annesburg", -- DON'T CHANGE
         promptName = "Annesburg Boats",
         blipAllowed = true,
         blipName = "Annesburg Boats",
@@ -102,6 +119,7 @@ Config.boatShops = {
         npcx = 3033.23, npcy = 1369.64, npcz = 41.62, npch = 67.42,
         boatx = 3036.05, boaty = 1374.40, boatz = 40.27, boath = 251.0,
         playerx = 3030.44, playery = 1370.84, playerz = 42.63, playerh = 244.6,
+        boatCamx = 3033.23, boatCamy = 1369.64, boatCamz = 41.62,
         distanceShop = 2.0,
         distanceReturn = 6.0,
         npcAllowed = true,
@@ -112,19 +130,27 @@ Config.boatShops = {
         shopOpen = 7,
         shopClose = 21,
         boats = {
-            canoetreetrunk = { boatName = "Dugout Canoe",   boatModel = "canoetreetrunk", currencyType = "cash", buyPrice = 25,   sellPrice = 15,  transferPrice = 5  },
-            canoe          = { boatName = "Canoe",          boatModel = "canoe",          currencyType = "cash", buyPrice = 40,   sellPrice = 25,  transferPrice = 5  },
-            pirogue        = { boatName = "Pirogue Canoe",  boatModel = "pirogue",        currencyType = "cash", buyPrice = 50,   sellPrice = 30,  transferPrice = 5  },
-            pirogue2       = { boatName = "Pirogue2 Canoe", boatModel = "pirogue2",       currencyType = "cash", buyPrice = 50,   sellPrice = 30,  transferPrice = 5  },
-            rowboat        = { boatName = "Rowboat",        boatModel = "rowboat",        currencyType = "cash", buyPrice = 100,  sellPrice = 70,  transferPrice = 10 },
-            rowboatSwamp   = { boatName = "Swamp Rowboat",  boatModel = "rowboatSwamp",   currencyType = "cash", buyPrice = 100,  sellPrice = 70,  transferPrice = 10 },
-            keelboat       = { boatName = "Keelboat",       boatModel = "keelboat",       currencyType = "cash", buyPrice = 800,  sellPrice = 600, transferPrice = 20 },
-            boatsteam02x   = { boatName = "Steamboat",      boatModel = "boatsteam02x",   currencyType = "cash", buyPrice = 1200, sellPrice = 900, transferPrice = 20 },
+            {
+                boatType = "Canoes",
+                ["canoetreetrunk"] = { label = "Dugout Canoe",  cashPrice = 25,   goldPrice = 1,  sellPrice = 15,  },
+                ["canoe"]          = { label = "Canoe",         cashPrice = 45,   goldPrice = 2,  sellPrice = 25,  },
+                ["pirogue"]        = { label = "Pirogue Canoe", cashPrice = 60,   goldPrice = 3,  sellPrice = 35,  },
+            },
+            {
+                boatType = "Rowboats",
+                ["skiff"]          = { label = "Skiff",         cashPrice = 100,  goldPrice = 5,  sellPrice = 60,  },
+                ["rowboat"]        = { label = "Rowboat",       cashPrice = 150,  goldPrice = 7,  sellPrice = 90,  },
+                ["rowboatSwamp"]   = { label = "Swamp Rowboat", cashPrice = 125,  goldPrice = 6,  sellPrice = 75,  },
+            },
+            {
+                boatType = "Steamboats",
+                ["boatsteam02x"]   = { label = "Steamboat",     cashPrice = 550,  goldPrice = 25, sellPrice = 330, },
+                ["keelboat"]       = { label = "Keelboat",      cashPrice = 800,  goldPrice = 40, sellPrice = 480, },
+            },
         },
     },
     blackwater = {
         shopName = "Blackwater Boats",
-        location = "blackwater", -- DON'T CHANGE
         promptName = "Blackwater Boats",
         blipAllowed = true,
         blipName = "Blackwater Boats",
@@ -135,6 +161,7 @@ Config.boatShops = {
         npcx = -682.36, npcy = -1242.97, npcz = 42.11, npch = 88.90,
         boatx = -682.22, boaty = -1252.50, boatz = 40.27, boath = 277.0,
         playerx = -685.16, playery = -1242.98, playerz = 43.11, playerh = 266.15,
+        boatCamx = -683.17, boatCamy = -1245.29, boatCamz = 43.06,
         distanceShop = 2.0,
         distanceReturn = 6.0,
         npcAllowed = true,
@@ -145,19 +172,27 @@ Config.boatShops = {
         shopOpen = 7,
         shopClose = 21,
         boats = {
-            canoetreetrunk = { boatName = "Dugout Canoe",   boatModel = "canoetreetrunk", currencyType = "cash", buyPrice = 25,   sellPrice = 15,  transferPrice = 5  },
-            canoe          = { boatName = "Canoe",          boatModel = "canoe",          currencyType = "cash", buyPrice = 40,   sellPrice = 25,  transferPrice = 5  },
-            pirogue        = { boatName = "Pirogue Canoe",  boatModel = "pirogue",        currencyType = "cash", buyPrice = 50,   sellPrice = 30,  transferPrice = 5  },
-            pirogue2       = { boatName = "Pirogue2 Canoe", boatModel = "pirogue2",       currencyType = "cash", buyPrice = 50,   sellPrice = 30,  transferPrice = 5  },
-            rowboat        = { boatName = "Rowboat",        boatModel = "rowboat",        currencyType = "cash", buyPrice = 100,  sellPrice = 70,  transferPrice = 10 },
-            rowboatSwamp   = { boatName = "Swamp Rowboat",  boatModel = "rowboatSwamp",   currencyType = "cash", buyPrice = 100,  sellPrice = 70,  transferPrice = 10 },
-            keelboat       = { boatName = "Keelboat",       boatModel = "keelboat",       currencyType = "cash", buyPrice = 800,  sellPrice = 600, transferPrice = 20 },
-            boatsteam02x   = { boatName = "Steamboat",      boatModel = "boatsteam02x",   currencyType = "cash", buyPrice = 1200, sellPrice = 900, transferPrice = 20 },
+            {
+                boatType = "Canoes",
+                ["canoetreetrunk"] = { label = "Dugout Canoe",  cashPrice = 25,   goldPrice = 1,  sellPrice = 15,  },
+                ["canoe"]          = { label = "Canoe",         cashPrice = 45,   goldPrice = 2,  sellPrice = 25,  },
+                ["pirogue"]        = { label = "Pirogue Canoe", cashPrice = 60,   goldPrice = 3,  sellPrice = 35,  },
+            },
+            {
+                boatType = "Rowboats",
+                ["skiff"]          = { label = "Skiff",         cashPrice = 100,  goldPrice = 5,  sellPrice = 60,  },
+                ["rowboat"]        = { label = "Rowboat",       cashPrice = 150,  goldPrice = 7,  sellPrice = 90,  },
+                ["rowboatSwamp"]   = { label = "Swamp Rowboat", cashPrice = 125,  goldPrice = 6,  sellPrice = 75,  },
+            },
+            {
+                boatType = "Steamboats",
+                ["boatsteam02x"]   = { label = "Steamboat",     cashPrice = 550,  goldPrice = 25, sellPrice = 330, },
+                ["keelboat"]       = { label = "Keelboat",      cashPrice = 800,  goldPrice = 40, sellPrice = 480, },
+            },
         },
     },
     wapiti = {
         shopName = "Wapiti Boats",
-        location = "wapiti", -- DON'T CHANGE
         promptName = "Wapiti Boats",
         blipAllowed = true,
         blipName = "Wapiti Boats",
@@ -168,6 +203,7 @@ Config.boatShops = {
         npcx = 614.46, npcy = 2209.5, npcz = 222.01, npch = 194.08,
         boatx = 635.8, boaty = 2212.13, boatz = 220.78, boath = 212.13,
         playerx = 614.14, playery = 2207.46, playerz = 223.06, playerh = 344.27,
+        boatCamx = 614.46, boatCamy = 2209.5, boatCamz = 222.01,
         distanceShop = 2.0,
         distanceReturn = 6.0,
         npcAllowed = true,
@@ -178,19 +214,27 @@ Config.boatShops = {
         shopOpen = 7,
         shopClose = 21,
         boats = {
-            canoetreetrunk = { boatName = "Dugout Canoe",   boatModel = "canoetreetrunk", currencyType = "cash", buyPrice = 25,   sellPrice = 15,  transferPrice = 5  },
-            canoe          = { boatName = "Canoe",          boatModel = "canoe",          currencyType = "cash", buyPrice = 40,   sellPrice = 25,  transferPrice = 5  },
-            pirogue        = { boatName = "Pirogue Canoe",  boatModel = "pirogue",        currencyType = "cash", buyPrice = 50,   sellPrice = 30,  transferPrice = 5  },
-            pirogue2       = { boatName = "Pirogue2 Canoe", boatModel = "pirogue2",       currencyType = "cash", buyPrice = 50,   sellPrice = 30,  transferPrice = 5  },
-            rowboat        = { boatName = "Rowboat",        boatModel = "rowboat",        currencyType = "cash", buyPrice = 100,  sellPrice = 70,  transferPrice = 10 },
-            rowboatSwamp   = { boatName = "Swamp Rowboat",  boatModel = "rowboatSwamp",   currencyType = "cash", buyPrice = 100,  sellPrice = 70,  transferPrice = 10 },
-            keelboat       = { boatName = "Keelboat",       boatModel = "keelboat",       currencyType = "cash", buyPrice = 800,  sellPrice = 600, transferPrice = 20 },
-            boatsteam02x   = { boatName = "Steamboat",      boatModel = "boatsteam02x",   currencyType = "cash", buyPrice = 1200, sellPrice = 900, transferPrice = 20 },
+            {
+                boatType = "Canoes",
+                ["canoetreetrunk"] = { label = "Dugout Canoe",  cashPrice = 25,   goldPrice = 1,  sellPrice = 15,  },
+                ["canoe"]          = { label = "Canoe",         cashPrice = 45,   goldPrice = 2,  sellPrice = 25,  },
+                ["pirogue"]        = { label = "Pirogue Canoe", cashPrice = 60,   goldPrice = 3,  sellPrice = 35,  },
+            },
+            {
+                boatType = "Rowboats",
+                ["skiff"]          = { label = "Skiff",         cashPrice = 100,  goldPrice = 5,  sellPrice = 60,  },
+                ["rowboat"]        = { label = "Rowboat",       cashPrice = 150,  goldPrice = 7,  sellPrice = 90,  },
+                ["rowboatSwamp"]   = { label = "Swamp Rowboat", cashPrice = 125,  goldPrice = 6,  sellPrice = 75,  },
+            },
+            {
+                boatType = "Steamboats",
+                ["boatsteam02x"]   = { label = "Steamboat",     cashPrice = 550,  goldPrice = 25, sellPrice = 330, },
+                ["keelboat"]       = { label = "Keelboat",      cashPrice = 800,  goldPrice = 40, sellPrice = 480, },
+            },
         },
     },
     manteca = {
         shopName = "Manteca Falls Boats",
-        location = "manteca", -- DON'T CHANGE
         promptName = "Manteca Falls Boats",
         blipAllowed = true,
         blipName = "Manteca Falls Boats",
@@ -201,6 +245,7 @@ Config.boatShops = {
         npcx = -2017.76, npcy = -3048.91, npcz = -12.21, npch = 21.23,
         boatx = -2025.37, boaty = -3048.24, boatz = -12.69, boath = 197.53,
         playerx = -2018.88, playery = -3046.35, playerz = -11.21, playerh = 201.5,
+        boatCamx = -2017.76, boatCamy = -3048.91, boatCamz = -12.21,
         distanceShop = 2.0,
         distanceReturn = 6.0,
         npcAllowed = true,
@@ -211,14 +256,23 @@ Config.boatShops = {
         shopOpen = 7,
         shopClose = 21,
         boats = {
-            canoetreetrunk = { boatName = "Dugout Canoe",   boatModel = "canoetreetrunk", currencyType = "cash", buyPrice = 25,   sellPrice = 15,  transferPrice = 5  },
-            canoe          = { boatName = "Canoe",          boatModel = "canoe",          currencyType = "cash", buyPrice = 40,   sellPrice = 25,  transferPrice = 5  },
-            pirogue        = { boatName = "Pirogue Canoe",  boatModel = "pirogue",        currencyType = "cash", buyPrice = 50,   sellPrice = 30,  transferPrice = 5  },
-            pirogue2       = { boatName = "Pirogue2 Canoe", boatModel = "pirogue2",       currencyType = "cash", buyPrice = 50,   sellPrice = 30,  transferPrice = 5  },
-            rowboat        = { boatName = "Rowboat",        boatModel = "rowboat",        currencyType = "cash", buyPrice = 100,  sellPrice = 70,  transferPrice = 10 },
-            rowboatSwamp   = { boatName = "Swamp Rowboat",  boatModel = "rowboatSwamp",   currencyType = "cash", buyPrice = 100,  sellPrice = 70,  transferPrice = 10 },
-            keelboat       = { boatName = "Keelboat",       boatModel = "keelboat",       currencyType = "cash", buyPrice = 800,  sellPrice = 600, transferPrice = 20 },
-            boatsteam02x   = { boatName = "Steamboat",      boatModel = "boatsteam02x",   currencyType = "cash", buyPrice = 1200, sellPrice = 900, transferPrice = 20 },
+            {
+                boatType = "Canoes",
+                ["canoetreetrunk"] = { label = "Dugout Canoe",  cashPrice = 25,   goldPrice = 1,  sellPrice = 15,  },
+                ["canoe"]          = { label = "Canoe",         cashPrice = 45,   goldPrice = 2,  sellPrice = 25,  },
+                ["pirogue"]        = { label = "Pirogue Canoe", cashPrice = 60,   goldPrice = 3,  sellPrice = 35,  },
+            },
+            {
+                boatType = "Rowboats",
+                ["skiff"]          = { label = "Skiff",         cashPrice = 100,  goldPrice = 5,  sellPrice = 60,  },
+                ["rowboat"]        = { label = "Rowboat",       cashPrice = 150,  goldPrice = 7,  sellPrice = 90,  },
+                ["rowboatSwamp"]   = { label = "Swamp Rowboat", cashPrice = 125,  goldPrice = 6,  sellPrice = 75,  },
+            },
+            {
+                boatType = "Steamboats",
+                ["boatsteam02x"]   = { label = "Steamboat",     cashPrice = 550,  goldPrice = 25, sellPrice = 330, },
+                ["keelboat"]       = { label = "Keelboat",      cashPrice = 800,  goldPrice = 40, sellPrice = 480, },
+            },
         },
     },
 }

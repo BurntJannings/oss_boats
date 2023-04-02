@@ -20,7 +20,13 @@ shared_scripts {
     'languages/*.lua'
 }
 
-dependencies {
-    'menuapi',
-    'oxmysql'
+ui_page {
+	'html/index.html'
+}
+
+files {
+	'html/*',
+	'html/css/*',
+	'html/fonts/*',
+	'html/img/*'
 }

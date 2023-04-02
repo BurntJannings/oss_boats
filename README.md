@@ -1,18 +1,16 @@
-# Boats
+# Boats v2
 
 #### Description
-This is a basic boating script for RedM servers using the [VORP framework](https://github.com/VORPCORE). Boats can be bought, sold and transferred through shops. There are 6 shops configured, more shop locations may be added using the `config.lua` file.
+This is a boating script for RedM servers using the [VORP framework](https://github.com/VORPCORE). Boats can be bought and sold through shops. There are 6 shops configured, more shop locations may be added using the `config.lua` file.
 
 #### Features
-- Buy, sell and transfer boats through the boat shops
+- Buy and sell boats through the boat shops
 - Cash or gold may be used for payments
 - Shop hours may be set individually for each shop or disabled to allow the shop to remain open
-- Boats are available to use in the shop where purchased
-- Boats can be transferred to other shops by menu (configurable transfer fee) or by driving boat to the new shop and returning it there.
 - Shop blips are colored and changeable per shop location
-- Blips can change color reflecting if shop is open or closed
+- Blips can change color reflecting if shop is open, closed or job locked
 - Shop access can be limited by job and jobgrade
-- Boats can be returned at the shop location via prompt or remotely using the in-boat menu after parking/beaching the boat somewhere
+- Boats can be returned at any shop location via prompt or remotely using the in-boat menu after parking/beaching the boat somewhere
 - In-boat menu for anchor operation and remote boat return
 - Config setting to prevent the spawning of NPC boats
 - Boats can be driven across the map without sinking
@@ -27,8 +25,9 @@ Settings can be changed in the `config.lua` file. Here is an example of one shop
         blipAllowed = true, -- Turns Blips On / Off
         blipName = "Lagras Boats", -- Name of the Blip on the Map
         blipSprite = 2005921736, -- 2005921736 = Canoe / -1018164873 = Tugboat
-        blipColorOpen = "BLIP_MODIFIER_MP_COLOR_32", -- Shop Open - Blip Colors Shown Below
-        blipColorClosed = "BLIP_MODIFIER_MP_COLOR_10", -- Shop Closed - Blip Colors Shown Below
+        blipColorOpen = "BLIP_MODIFIER_MP_COLOR_32", -- Shop Open - Default: White - Blip Colors Shown Below
+        blipColorClosed = "BLIP_MODIFIER_MP_COLOR_10", -- Shop Closed - Default: Red - Blip Colors Shown Below
+        blipColorJob = "BLIP_MODIFIER_MP_COLOR_23", -- Shop Job Locked - Default: Yellow - Blip Colors Shown Below
         npcx = 2123.95, npcy = -551.63, npcz = 41.53, npch = 113.62, -- Blip and NPC Positions
         boatx = 2122.8, boaty = -544.76, boatz = 40.55, boath = 46.69, -- Boat Spawn and Return Positions
         playerx = 2121.31, playery = -552.65, playerz = 42.7, playerh = 316.34, -- Player Return Teleport Position
@@ -72,4 +71,4 @@ Settings can be changed in the `config.lua` file. Here is an example of one shop
 - SavSin
 
 #### GitHub
-- https://github.com/JusCampin/oss_boats
+- https://github.com/JusCampin/oss_boats_v2

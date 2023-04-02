@@ -1,7 +1,5 @@
 local VORPcore = {}
-TriggerEvent("getCore", function(core)
-    VORPcore = core
-end)
+
 -- Start Prompts
 local OpenShops
 local CloseShops
@@ -17,19 +15,19 @@ local SpawnPoint = {}
 local BoatShopName
 local ShowroomBoat_entity
 local MyBoat_entity
+local MyBoat
 local PlayerJob
 local JobName
 local JobGrade
 local InMenu = false
 local IsBoating = false
 local isAnchored
---local OwnedData = {}
-local MyBoat
---local MyBoatId
-local MyBoatModel
-local MyBoatName
 local ShopId
 MenuData = {}
+
+TriggerEvent("getCore", function(core)
+    VORPcore = core
+end)
 
 TriggerEvent("menuapi:getData", function(call)
     MenuData = call
@@ -53,6 +51,7 @@ Citizen.CreateThread(function()
         if InMenu == false and not dead then
             for shopId, shopConfig in pairs(Config.boatShops) do
                 if shopConfig.shopHours then
+                    -- Using Shop Hours - Shop Closed
                     if hour >= shopConfig.shopClose or hour < shopConfig.shopOpen then
                         if Config.blipAllowedClosed then
                             if not Config.boatShops[shopId].BlipHandle and shopConfig.blipAllowed then
@@ -101,6 +100,7 @@ Citizen.CreateThread(function()
                             end
                         end
                     elseif hour >= shopConfig.shopOpen then
+                        -- Using Shop Hours - Shop Open
                         if not Config.boatShops[shopId].BlipHandle and shopConfig.blipAllowed then
                             AddBlip(shopId)
                         end
@@ -139,6 +139,7 @@ Citizen.CreateThread(function()
                                 end
                             end
                         else
+                            -- Using Shop Hours - Shop Open - Job Locked
                             if Config.boatShops[shopId].BlipHandle then
                                 Citizen.InvokeNative(0x662D364ABF16DE2F, Config.boatShops[shopId].BlipHandle, GetHashKey(shopConfig.blipColorJob)) -- BlipAddModifier
                             end
@@ -186,6 +187,7 @@ Citizen.CreateThread(function()
                         end
                     end
                 else
+                    -- Not Using Shop Hours - Shop Always Open
                     if not Config.boatShops[shopId].BlipHandle and shopConfig.blipAllowed then
                         AddBlip(shopId)
                     end
@@ -224,6 +226,7 @@ Citizen.CreateThread(function()
                             end
                         end
                     else
+                        -- -- Not Using Shop Hours - Shop Always Open - Job Locked
                         if Config.boatShops[shopId].BlipHandle then
                             Citizen.InvokeNative(0x662D364ABF16DE2F, Config.boatShops[shopId].BlipHandle, GetHashKey(shopConfig.blipColorJob)) -- BlipAddModifier
                         end
@@ -275,15 +278,14 @@ Citizen.CreateThread(function()
     end
 end)
 
+-- Open Main Menu
 function OpenMenu(shopId)
     InMenu = true
     ShopId = shopId
-
-    shopConfig = Config.boatShops[ShopId]
+    local shopConfig = Config.boatShops[ShopId]
     BoatShopName = shopConfig.shopName
     SpawnPoint = {x = shopConfig.boatx, y = shopConfig.boaty, z = shopConfig.boatz, h = shopConfig.boath}
-
-    createCamera()
+    CreateCamera()
 
     SendNUIMessage({
         action = "show",
@@ -291,29 +293,30 @@ function OpenMenu(shopId)
         location = BoatShopName
     })
     SetNuiFocus(true, true)
-
     TriggerServerEvent('oss_boats:GetMyBoats')
 end
 
+-- Get Boat Data for Purchases
 function getShopData()
     local ret = Config.boatShops[ShopId].boats
     return ret
 end
 
+-- Get Boat Data for Players Boats
 RegisterNetEvent('oss_boats:ReceiveBoatsData')
 AddEventHandler('oss_boats:ReceiveBoatsData', function(dataBoats)
 
     SendNUIMessage({ myBoatsData = dataBoats })
 end)
 
+-- View Boats for Purchase
 RegisterNUICallback("LoadBoat", function(data)
-    local boatModel = data.boatModel
-
     if MyBoat_entity ~= nil then
         DeleteEntity(MyBoat_entity)
         MyBoat_entity = nil
     end
 
+    local boatModel = data.boatModel
     local modelHash = GetHashKey(boatModel)
     if IsModelValid(modelHash) then
         if not HasModelLoaded(modelHash) then
@@ -334,25 +337,22 @@ RegisterNUICallback("LoadBoat", function(data)
     Citizen.InvokeNative(0x7D9EFB7AD6B19754, ShowroomBoat_entity, true) -- FreezeEntityPosition
 end)
 
+-- Buy and Name New Boat
 RegisterNUICallback("BuyBoat", function(data)
+
     TriggerServerEvent('oss_boats:BuyBoat', data)
 end)
 
 RegisterNetEvent('oss_boats:SetBoatName')
 AddEventHandler('oss_boats:SetBoatName', function(data)
-    print("set boat name")
 
     SendNUIMessage({ action = "hide" })
     SetNuiFocus(false, false)
-
-    print("menu hidden")
     Wait(200)
+
     local boatName = ""
-    print("local boatname")
 	Citizen.CreateThread(function()
-        print("enter thread")
-		AddTextEntry('FMMC_MPM_NA', "Name your boat:")
-        print("name boat")
+		AddTextEntry('FMMC_MPM_NA', _U("nameBoat"))
 		DisplayOnscreenKeyboard(1, "FMMC_MPM_NA", "", "", "", "", "", 30)
 		while (UpdateOnscreenKeyboard() == 0) do
 			DisableAllControlActions(0)
@@ -361,7 +361,6 @@ AddEventHandler('oss_boats:SetBoatName', function(data)
 		if (GetOnscreenKeyboardResult()) then
             boatName = GetOnscreenKeyboardResult()
             TriggerServerEvent('oss_boats:SaveNewBoat', data, boatName)
-            print("show menu next")
 
             SendNUIMessage({
                 action = "show",
@@ -369,26 +368,25 @@ AddEventHandler('oss_boats:SetBoatName', function(data)
                 location = BoatShopName
             })
             SetNuiFocus(true, true)
-            print("get myboats")
-        Wait(1000)
-        TriggerServerEvent('oss_boats:GetMyBoats')
+            Wait(1000)
+
+            TriggerServerEvent('oss_boats:GetMyBoats')
 		end
     end)
 end)
 
+-- View Player Owned Boats
 RegisterNUICallback("LoadMyBoat", function(data)
-    local boatModel = data.BoatModel
-
     if ShowroomBoat_entity ~= nil then
         DeleteEntity(ShowroomBoat_entity)
         ShowroomBoat_entity = nil
     end
-
     if MyBoat_entity ~= nil then
         DeleteEntity(MyBoat_entity)
         MyBoat_entity = nil
     end
 
+    local boatModel = data.BoatModel
     local modelHash = GetHashKey(boatModel)
     if not HasModelLoaded(modelHash) then
         RequestModel(modelHash)
@@ -402,69 +400,57 @@ RegisterNUICallback("LoadMyBoat", function(data)
     Citizen.InvokeNative(0x7D9EFB7AD6B19754, MyBoat_entity, true) -- FreezeEntityPosition
 end)
 
-RegisterNUICallback("SelectBoat", function(data)
-    TriggerServerEvent('oss_boats:GetBoatInfo', tonumber(data.boatID))
-end)
-
-RegisterNetEvent('oss_boats:SetBoatInfo')
-AddEventHandler('oss_boats:SetBoatInfo', function(model, name)
-    MyBoatModel = model
-    MyBoatName = name
-end)
-
-RegisterNUICallback("LaunchBoat", function()
+-- Launch Player Owned Boats
+RegisterNUICallback("LaunchBoat", function(data)
     if MyBoat then
         DeleteEntity(MyBoat)
     end
+
+    local myBoatModel = data.BoatModel
+    local myBoatName = data.BoatName
     local player = PlayerPedId()
     local boatConfig = Config.boatShops[ShopId]
-    RequestModel(MyBoatModel)
-    while not HasModelLoaded(MyBoatModel) do
+    RequestModel(myBoatModel)
+    while not HasModelLoaded(myBoatModel) do
         Wait(100)
     end
-    MyBoat = CreateVehicle(MyBoatModel, boatConfig.boatx, boatConfig.boaty, boatConfig.boatz, boatConfig.boath, true, false)
+
+    MyBoat = CreateVehicle(myBoatModel, boatConfig.boatx, boatConfig.boaty, boatConfig.boatz, boatConfig.boath, true, false)
     SetVehicleOnGroundProperly(MyBoat)
-    SetModelAsNoLongerNeeded(MyBoatModel)
+    SetModelAsNoLongerNeeded(myBoatModel)
     SetEntityInvincible(MyBoat, 1)
     DoScreenFadeOut(500)
     Wait(500)
     SetPedIntoVehicle(player, MyBoat, -1)
     Wait(500)
     DoScreenFadeIn(500)
+
     local boatBlip = Citizen.InvokeNative(0x23F74C2FDA6E7C61, -1749618580, MyBoat) -- BlipAddForEntity
     SetBlipSprite(boatBlip, GetHashKey("blip_canoe"), true)
-    Citizen.InvokeNative(0x9CB1A1623062F402, boatBlip, MyBoatName) -- SetBlipName
+    Citizen.InvokeNative(0x9CB1A1623062F402, boatBlip, myBoatName) -- SetBlipName
     IsBoating = true
     VORPcore.NotifyRightTip(_U("boatMenuTip"),4000)
 end)
 
+-- Sell Player Owned Boats
 RegisterNUICallback("SellBoat", function(data)
     DeleteEntity(MyBoat_entity)
 
-    local boatId = tonumber(data.boatID)
-    TriggerServerEvent('oss_boats:SellBoat', boatId, ShopId)
-    Wait(300)
-
-    SendNUIMessage({
-        action = "show",
-        shopData = getShopData(),
-        location = BoatShopName
-    })
-    TriggerServerEvent('oss_boats:GetMyBoats')
+    local boatId = tonumber(data.BoatID)
+    local boatName = data.BoatName
+    TriggerServerEvent('oss_boats:SellBoat', boatId, boatName, ShopId)
 end)
 
+-- Close Main Menu
 RegisterNUICallback("CloseMenu", function()
     local player = PlayerPedId()
 
     SendNUIMessage({ action = "hide" })
     SetNuiFocus(false, false)
 
-    SetEntityVisible(player, true)
-
     if ShowroomBoat_entity ~= nil then
         DeleteEntity(ShowroomBoat_entity)
     end
-
     if MyBoat_entity ~= nil then
         DeleteEntity(MyBoat_entity)
     end
@@ -476,6 +462,7 @@ RegisterNUICallback("CloseMenu", function()
     ClearPedTasksImmediately(player)
 end)
 
+-- Reopen Menu After Sell or Failed Purchase
 RegisterNetEvent('oss_boats:BoatMenu')
 AddEventHandler('oss_boats:BoatMenu', function()
     if ShowroomBoat_entity ~= nil then
@@ -491,7 +478,8 @@ AddEventHandler('oss_boats:BoatMenu', function()
     TriggerServerEvent('oss_boats:GetMyBoats')
 end)
 
-function createCamera()
+-- Camera to View Boats
+function CreateCamera()
     local shopConfig = Config.boatShops[ShopId]
     local boatCam = CreateCam("DEFAULT_SCRIPTED_CAMERA", true)
     SetCamCoord(boatCam, shopConfig.boatCamx, shopConfig.boatCamy, shopConfig.boatCamz + 1.2 )
@@ -503,9 +491,9 @@ function createCamera()
     RenderScriptCams(true, false, 0, 0, 0)
 end
 
+-- Rotate Boats while Viewing
 RegisterNUICallback("Rotate", function(data)
     local direction = data.RotateBoat
-
     if direction == "left" then
         Rotation(20)
     elseif direction == "right" then
@@ -516,7 +504,6 @@ end)
 function Rotation(dir)
     local ownedBoat = MyBoat_entity
     local shopBoat = ShowroomBoat_entity
-
     if ownedBoat then
         local ownedRot = GetEntityHeading(ownedBoat) + dir
         SetEntityHeading(ownedBoat, ownedRot % 360)
@@ -526,235 +513,6 @@ function Rotation(dir)
         SetEntityHeading(shopBoat, shopRot % 360)
     end
 end
-
-function printTable(t)
-    local printTable_cache = {}
-    local function sub_printTable(t, indent)
-
-        if (printTable_cache[tostring(t)]) then
-            print(indent .. "*" .. tostring(t))
-        else
-            printTable_cache[tostring(t)] = true
-            if (type(t) == "table") then
-                for pos,val in pairs(t) do
-                    if (type(val) == "table") then
-                        print(indent .. "[" .. pos .. "] => " .. tostring(t).. " {")
-                        sub_printTable(val, indent .. string.rep(" ", string.len(pos)+8))
-                        print(indent .. string.rep(" ", string.len(pos)+6 ) .. "}")
-                    elseif (type(val) == "string") then
-                        print(indent .. "[" .. pos .. '] => "' .. val .. '"')
-                    else
-                        print(indent .. "[" .. pos .. "] => " .. tostring(val))
-                    end
-                end
-            else
-                print(indent..tostring(t))
-            end
-        end
-    end
-
-    if (type(t) == "table") then
-        print(tostring(t) .. " {")
-        sub_printTable(t, "  ")
-        print("}")
-    else
-        sub_printTable(t, "  ")
-    end
-end
-
---[[function MainMenu(shopId)
-    MenuData.CloseAll()
-    InMenu = true
-    local elements = {
-        {
-            label = _U("buyBoat"),
-            value = "buy",
-            desc = _U("newBoat")
-        },
-        {
-            label = _U("own"),
-            value = "own",
-            desc = _U("owned")
-        }
-    }
-    MenuData.Open('default', GetCurrentResourceName(), 'menuapi',
-    {
-        title = Config.boatShops[shopId].shopName,
-        subtext = _U("mainMenu"),
-        align = "top-left",
-        elements = elements,
-    },
-    function(data, menu)
-        if data.current == "backup" then
-            _G[data.trigger]()
-        end
-        if data.current.value == "buy" then
-            BuyMenu(shopId)
-        end
-        if data.current.value == "own" then
-            
-            TriggerServerEvent('oss_boats:GetOwnedBoats', shopId)
-        end
-    end,
-    function(data, menu)
-        menu.close()
-        InMenu = false
-        ClearPedTasksImmediately(PlayerPedId())
-        DisplayRadar(true)
-    end)
-end
-
--- Buy Boats Menu
-function BuyMenu(shopId)
-    MenuData.CloseAll()
-    InMenu = true
-    local player = PlayerPedId()
-    local elements = {}
-
-    for boat, boatConfig in pairs(Config.boatShops[shopId].boats) do
-        elements[#elements + 1] = {
-            label = boatConfig.boatName,
-            value = boat,
-            desc = _U("price") .. boatConfig.buyPrice .. " " .. boatConfig.currencyType,
-            info = boatConfig,
-        }
-    end
-    MenuData.Open('default', GetCurrentResourceName(), 'menuapi',
-    {
-        title = Config.boatShops[shopId].shopName,
-        subtext = _U("buyBoat"),
-        align = "top-left",
-        elements = elements,
-        lastmenu = 'MainMenu',
-    },
-    function(data, menu)
-        if data.current == "backup" then
-            _G[data.trigger](shopId)
-        end
-        if data.current.value then
-            local buyData = data.current.info
-
-            TriggerServerEvent('oss_boats:BuyBoat', buyData)
-            menu.close()
-            InMenu = false
-            ClearPedTasksImmediately(player)
-            DisplayRadar(true)
-        end
-    end,
-    function(data, menu)
-        menu.close()
-        InMenu = false
-        ClearPedTasksImmediately(player)
-        DisplayRadar(true)
-    end)
-end
-
--- Menu to Manage Owned Boats at Shop Location
-RegisterNetEvent("oss_boats:OwnedBoatsMenu")
-AddEventHandler("oss_boats:OwnedBoatsMenu", function(ownedBoats, shopId)
-    MenuData.CloseAll()
-    InMenu = true
-    local elements = {}
-
-    for boat, ownedBoatData in pairs(ownedBoats) do
-        elements[#elements + 1] = {
-            label = ownedBoatData.name,
-            value = boat,
-            desc = _U("chooseBoat"),
-            info = ownedBoatData,
-        }
-    end
-    MenuData.Open('default', GetCurrentResourceName(), 'menuapi',
-    {
-        title = Config.boatShops[shopId].shopName,
-        subtext = _U("own"),
-        align = "top-left",
-        elements = elements,
-        lastmenu = 'MainMenu',
-    },
-    function(data, menu)
-        if data.current == "backup" then
-            _G[data.trigger](shopId)
-        end
-        OwnedData = data.current.info
-        if data.current.value then
-            BoatMenu(shopId)
-        end
-    end,
-    function(data, menu)
-        menu.close()
-        InMenu = false
-        ClearPedTasksImmediately(PlayerPedId())
-        DisplayRadar(true)
-    end)
-end)
-
--- Menu to Launch, Sell or Transfer Owned Boats
-function BoatMenu(shopId)
-    MenuData.CloseAll()
-    InMenu = true
-    local boatName = OwnedData.name
-    local boatModel = OwnedData.model
-    local boatData = Config.boatShops[shopId].boats[boatModel]
-    local currencyType = boatData.currencyType
-    local sellPrice = boatData.sellPrice
-    local player = PlayerPedId()
-    local descSell
-    if currencyType == "cash" then
-        descSell = _U("sell") .. boatName .. _U("frcash2") .. sellPrice
-
-    elseif currencyType == "gold" then
-        descSell = _U("sell") .. boatName .. _U("fr2") .. sellPrice .. _U("ofgold2")
-    end
-
-    local elements = {
-        {
-            label = _U("launch"),
-            value = "launch",
-            desc = _U("launchBoat") .. boatName
-        },
-        {
-            label = _U("sellBoat"),
-            value = "sell",
-            desc = descSell
-        }
-    }
-    MenuData.Open('default', GetCurrentResourceName(), 'menuapi' .. shopId,
-    {
-        title = Config.boatShops[shopId].shopName,
-        subtext = boatName,
-        align = "top-left",
-        elements = elements,
-        lastmenu = 'MainMenu',
-    },
-    function(data, menu)
-        if data.current == "backup" then
-            _G[data.trigger](shopId)
-        end
-        if data.current.value == "launch" then
-
-            menu.close()
-            InMenu = false
-            ClearPedTasksImmediately(player)
-            DisplayRadar(true)
-            SpawnBoat(shopId)
-
-        elseif data.current.value == "sell" then
-
-            TriggerServerEvent('oss_boats:SellBoat', OwnedData, boatData)
-            menu.close()
-            InMenu = false
-            ClearPedTasksImmediately(player)
-            DisplayRadar(true)
-        end
-    end,
-    function(data, menu)
-        menu.close()
-        InMenu = false
-        ClearPedTasksImmediately(player)
-        DisplayRadar(true)
-    end)
-end]]
 
 -- Boat Anchor Operation and Boat Return at Non-Shop Locations
 Citizen.CreateThread(function()
@@ -824,35 +582,6 @@ function BoatOptionsMenu()
         DisplayRadar(true)
     end)
 end
-
--- Spawn New or Owned Boat
---[[function SpawnBoat(shopId)
-    if MyBoat then
-        DeleteEntity(MyBoat)
-    end
-    local player = PlayerPedId()
-    local name = OwnedData.name
-    local model = OwnedData.model
-    local boatConfig = Config.boatShops[shopId]
-    RequestModel(model)
-    while not HasModelLoaded(model) do
-        Wait(500)
-    end
-    MyBoat = CreateVehicle(model, boatConfig.boatx, boatConfig.boaty, boatConfig.boatz, boatConfig.boath, true, false)
-    SetVehicleOnGroundProperly(MyBoat)
-    SetModelAsNoLongerNeeded(model)
-    SetEntityInvincible(MyBoat, 1)
-    DoScreenFadeOut(500)
-    Wait(500)
-    SetPedIntoVehicle(player, MyBoat, -1)
-    Wait(500)
-    DoScreenFadeIn(500)
-    local boatBlip = Citizen.InvokeNative(0x23F74C2FDA6E7C61, -1749618580, MyBoat) -- BlipAddForEntity
-    SetBlipSprite(boatBlip, GetHashKey("blip_canoe"), true)
-    Citizen.InvokeNative(0x9CB1A1623062F402, boatBlip, name) -- SetBlipName
-    IsBoating = true
-    VORPcore.NotifyRightTip(_U("boatMenuTip"),4000)
-end]]
 
 -- Return Boat Using Prompt at Shop Location
 function ReturnBoat(shopId)

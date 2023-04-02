@@ -84,7 +84,40 @@ window.addEventListener('message', function(event) {
     };
 });
 
-let currentPage = 'page_myboats';
+function BuyBoat(modelB, price, isCash) {
+    $('#page_myboats .scroll-container .collapsible').html('');
+    $('#page_shop .scroll-container .collapsible').html('');
+    $("#creatormenu").fadeOut(1000);
+    if (isCash) {        
+        $.post('http://oss_boats/BuyBoat', JSON.stringify({ ModelB: modelB, Cash: price, IsCash: isCash }));
+    } else {
+        $.post('http://oss_boats/BuyBoat', JSON.stringify({ ModelB: modelB, Gold: price, IsCash: isCash }));
+    };
+};
+
+function Select(boatID, boatModel) {    
+    $.post('http://oss_boats/LoadMyBoat', JSON.stringify({ BoatID: boatID, BoatModel: boatModel }));
+};
+
+function Launch(boatID, boatModel, boatName) {    
+    $.post('http://oss_boats/LaunchBoat', JSON.stringify({ BoatID: boatID, BoatModel: boatModel, BoatName: boatName }));
+    $('#page_myboats .scroll-container .collapsible').html('');
+    $('#page_shop .scroll-container .collapsible').html('');
+    $("#creatormenu").fadeOut(1000);
+    CloseMenu()
+};
+
+function Sell(boatID, boatName) {    
+    $.post('http://oss_boats/SellBoat', JSON.stringify({ BoatID: boatID,  BoatName: boatName}));
+    $('#page_myboats .scroll-container .collapsible').html('');
+    $('#page_shop .scroll-container .collapsible').html('');
+    $("#creatormenu").fadeOut(1000);
+};
+
+function Rotate(direction) {
+    let rotateBoat = direction;
+    $.post('http://oss_boats/Rotate', JSON.stringify({ RotateBoat: rotateBoat }));
+};
 
 function CloseMenu() {
     $.post('http://oss_boats/CloseMenu');
@@ -94,6 +127,7 @@ function CloseMenu() {
     ResetMenu();
 };
 
+let currentPage = 'page_myboats';
 function ResetMenu() {
     $(`#${currentPage}`).hide();
     currentPage = 'page_myboats';
@@ -109,40 +143,3 @@ $('.menu-selectb').on('click', function() {
     $('.menu-selectb.active').removeClass('active');
     $(this).addClass('active');
 });
-
-function Select(boatID, boatModel) {    
-    $.post('http://oss_boats/LoadMyBoat', JSON.stringify({ BoatID: boatID, BoatModel: boatModel }));
-};
-
-function Launch(boatID, boatModel, boatName) {    
-    $.post('http://oss_boats/LaunchBoat', JSON.stringify({ BoatID: boatID, BoatModel: boatModel, BoatName: boatName }));
-    $('#page_myboats .scroll-container .collapsible').html('');
-    $('#page_shop .scroll-container .collapsible').html('');
-    $("#creatormenu").fadeOut(1000);
-    CloseMenu()
-};
-
-function BuyBoat(modelB, price, isCash) {
-    $('#page_myboats .scroll-container .collapsible').html('');
-    $('#page_shop .scroll-container .collapsible').html('');
-    $("#creatormenu").fadeOut(1000);
-    if (isCash) {        
-        $.post('http://oss_boats/BuyBoat', JSON.stringify({ ModelB: modelB, Cash: price, IsCash: isCash }));
-    } else {
-        $.post('http://oss_boats/BuyBoat', JSON.stringify({ ModelB: modelB, Gold: price, IsCash: isCash }));
-    };
-};
-
-function Sell(boatID, boatName) {    
-    $.post('http://oss_boats/SellBoat', JSON.stringify({ BoatID: boatID,  BoatName: boatName}));
-    $('#page_myboats .scroll-container .collapsible').html('');
-    $('#page_shop .scroll-container .collapsible').html('');
-    $("#creatormenu").fadeOut(1000);
-};
-
-function Rotate(direction) {
-    let rotateBoat = direction;
-    $.post('http://oss_boats/Rotate', JSON.stringify({ RotateBoat: rotateBoat }));
-};
-
-

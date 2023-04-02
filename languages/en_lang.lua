@@ -23,5 +23,5 @@ Locales["en_lang"] = {
     soldBoat = "You sold ~o~",
     frcash = "~q~ for ~t6~$",
     nameBoat = "Name your boat:",
-    boatSubMenu = " ",
+    boatSubMenu = " "
 }

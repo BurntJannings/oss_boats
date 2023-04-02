@@ -42,4 +42,7 @@ Locales["en_lang"] = {
     needJob = "To use this shop you need job: ~o~",
     price = "Price: ",
     your = "Your ~o~",
+    boatLimit = "You can have a maximum of ~o~",
+    boats = "~q~ boats!",
+    soldBoat = "You sold a boat for: $~t6~",
 }

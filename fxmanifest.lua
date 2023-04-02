@@ -19,3 +19,14 @@ shared_scripts {
     'locale.lua',
     'languages/*.lua'
 }
+
+ui_page {
+	'html/index.html'
+}
+
+files {
+	'html/*',
+	'html/css/*',
+	'html/fonts/*',
+	'html/img/*'
+}

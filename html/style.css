@@ -478,19 +478,13 @@ input[type=number]:active {
 }
 
 .panel-myboat.item {
-    /*width: calc(100% - 60px) !important;
-    height: 3vh;
-    background: url('img/input.png'), url('img/input.png');
+    width: calc(100% - 60px) !important;
+    background-image: url('img/input.png'), url('img/input.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: 100% 100%;
-    margin: auto;*/
-    width: calc(100% - 60px) !important;
-    background-image: url('img/input.png'), url('img/input.png');
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
     margin: auto;
+    margin-bottom: 3px;
 }
 
 .item-myboat {

@@ -46,6 +46,7 @@ AddEventHandler('oss_boats:BuyBoat', function(data)
     end)
 end)
 
+-- Save New Boat Purchase to Database
 RegisterServerEvent('oss_boats:SaveNewBoat')
 AddEventHandler('oss_boats:SaveNewBoat', function(data, name)
     local _source = source
@@ -58,7 +59,7 @@ AddEventHandler('oss_boats:SaveNewBoat', function(data, name)
     end)
 end)
 
--- Get List of Owned Boats
+-- Get Player Owned Boats
 RegisterServerEvent('oss_boats:GetMyBoats')
 AddEventHandler('oss_boats:GetMyBoats', function()
     local _source = source
@@ -72,7 +73,7 @@ AddEventHandler('oss_boats:GetMyBoats', function()
     end)
 end)
 
--- Sell Owned Boats
+-- Sell Player Owned Boats
 RegisterServerEvent('oss_boats:SellBoat')
 AddEventHandler('oss_boats:SellBoat', function(boatId, boatName, shopId)
     local _source = source
@@ -107,19 +108,6 @@ AddEventHandler('oss_boats:SellBoat', function(boatId, boatName, shopId)
     end)
 end)
 
--- Prevent NPC Boat Spawns
-if Config.blockNpcBoats then
-    AddEventHandler('entityCreating', function(entity)
-        if GetEntityType(entity) == 2 then
-            if GetVehicleType(entity) == "boat" then
-                if GetEntityPopulationType(entity) ~= 7 and GetEntityPopulationType(entity) ~= 8 then
-                    CancelEvent()
-                end
-            end
-        end
-    end)
-end
-
 -- Check Player Job and Job Grade
 RegisterServerEvent('oss_boats:getPlayerJob')
 AddEventHandler('oss_boats:getPlayerJob', function()
@@ -132,37 +120,15 @@ AddEventHandler('oss_boats:getPlayerJob', function()
     end
 end)
 
-function printTable(t)
-    local printTable_cache = {}
-    local function sub_printTable(t, indent)
-
-        if (printTable_cache[tostring(t)]) then
-            print(indent .. "*" .. tostring(t))
-        else
-            printTable_cache[tostring(t)] = true
-            if (type(t) == "table") then
-                for pos,val in pairs(t) do
-                    if (type(val) == "table") then
-                        print(indent .. "[" .. pos .. "] => " .. tostring(t).. " {")
-                        sub_printTable(val, indent .. string.rep(" ", string.len(pos)+8))
-                        print(indent .. string.rep(" ", string.len(pos)+6 ) .. "}")
-                    elseif (type(val) == "string") then
-                        print(indent .. "[" .. pos .. '] => "' .. val .. '"')
-                    else
-                        print(indent .. "[" .. pos .. "] => " .. tostring(val))
-                    end
+-- Prevent NPC Boat Spawns
+if Config.blockNpcBoats then
+    AddEventHandler('entityCreating', function(entity)
+        if GetEntityType(entity) == 2 then
+            if GetVehicleType(entity) == "boat" then
+                if GetEntityPopulationType(entity) ~= 7 and GetEntityPopulationType(entity) ~= 8 then
+                    CancelEvent()
                 end
-            else
-                print(indent..tostring(t))
             end
         end
-    end
-
-    if (type(t) == "table") then
-        print(tostring(t) .. " {")
-        sub_printTable(t, "  ")
-        print("}")
-    else
-        sub_printTable(t, "  ")
-    end
+    end)
 end

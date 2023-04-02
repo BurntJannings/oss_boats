@@ -16,7 +16,7 @@ Config.returnKey = 0xD9D0E1C0 --[spacebar]
 Config.blockNpcBoats = true -- If true, will block the spawning of NPC boats
 
 -- Limit Number of Boats per Player
-Config.maxBoats = 2 -- Default: 10
+Config.maxBoats = 8 -- Default: 8
 
 -- Show or Remove Blip when Closed
 Config.blipAllowedClosed = true -- If true, will show colored blip when shop is closed

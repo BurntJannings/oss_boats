@@ -1,8 +1,4 @@
 local VORPcore = {}
-TriggerEvent("getCore", function(core)
-    VORPcore = core
-end)
--- Start Prompts
 local OpenShops
 local CloseShops
 local OpenReturn
@@ -11,8 +7,6 @@ local ShopPrompt1 = GetRandomIntInRange(0, 0xffffff)
 local ShopPrompt2 = GetRandomIntInRange(0, 0xffffff)
 local ReturnPrompt1 = GetRandomIntInRange(0, 0xffffff)
 local ReturnPrompt2 = GetRandomIntInRange(0, 0xffffff)
--- End Prompts
-
 local SpawnPoint = {}
 local BoatShopName
 local ShowroomBoat_entity
@@ -23,13 +17,13 @@ local JobGrade
 local InMenu = false
 local IsBoating = false
 local isAnchored
---local OwnedData = {}
 local MyBoat
-local MyBoatId
-local MyBoatModel
-local MyBoatName
 local ShopId
 MenuData = {}
+
+TriggerEvent("getCore", function(core)
+    VORPcore = core
+end)
 
 TriggerEvent("menuapi:getData", function(call)
     MenuData = call
@@ -279,7 +273,7 @@ function OpenMenu(shopId)
     InMenu = true
     ShopId = shopId
 
-    shopConfig = Config.boatShops[ShopId]
+    local shopConfig = Config.boatShops[ShopId]
     BoatShopName = shopConfig.shopName
     SpawnPoint = {x = shopConfig.boatx, y = shopConfig.boaty, z = shopConfig.boatz, h = shopConfig.boath}
 
@@ -340,19 +334,14 @@ end)
 
 RegisterNetEvent('oss_boats:SetBoatName')
 AddEventHandler('oss_boats:SetBoatName', function(data)
-    print("set boat name")
 
     SendNUIMessage({ action = "hide" })
     SetNuiFocus(false, false)
 
-    print("menu hidden")
     Wait(200)
     local boatName = ""
-    print("local boatname")
 	Citizen.CreateThread(function()
-        print("enter thread")
 		AddTextEntry('FMMC_MPM_NA', "Name your boat:")
-        print("name boat")
 		DisplayOnscreenKeyboard(1, "FMMC_MPM_NA", "", "", "", "", "", 30)
 		while (UpdateOnscreenKeyboard() == 0) do
 			DisableAllControlActions(0)
@@ -361,7 +350,6 @@ AddEventHandler('oss_boats:SetBoatName', function(data)
 		if (GetOnscreenKeyboardResult()) then
             boatName = GetOnscreenKeyboardResult()
             TriggerServerEvent('oss_boats:SaveNewBoat', data, boatName)
-            print("show menu next")
 
             SendNUIMessage({
                 action = "show",
@@ -369,7 +357,6 @@ AddEventHandler('oss_boats:SetBoatName', function(data)
                 location = BoatShopName
             })
             SetNuiFocus(true, true)
-            print("get myboats")
         Wait(1000)
         TriggerServerEvent('oss_boats:GetMyBoats')
 		end
@@ -402,36 +389,21 @@ RegisterNUICallback("LoadMyBoat", function(data)
     Citizen.InvokeNative(0x7D9EFB7AD6B19754, MyBoat_entity, true) -- FreezeEntityPosition
 end)
 
-RegisterNUICallback("SelectBoat", function(data)
-    --TriggerServerEvent('oss_boats:GetBoatInfo', tonumber(data.boatID))
-end)
-
-RegisterNetEvent('oss_boats:SetBoatInfo')
-AddEventHandler('oss_boats:SetBoatInfo', function(model, name)
-    MyBoatModel = model
-    MyBoatName = name
-end)
-
 RegisterNUICallback("LaunchBoat", function(data)
-    print("Enter Launch")
     if MyBoat then
         DeleteEntity(MyBoat)
     end
-    MyBoatId = data.BoatID
-    MyBoatModel = data.BoatModel
-    MyBoatName = data.BoatName
-    print(MyBoatId)
-    print(MyBoatModel)
-    print(MyBoatName)
+    local myBoatModel = data.BoatModel
+    local myBoatName = data.BoatName
     local player = PlayerPedId()
     local boatConfig = Config.boatShops[ShopId]
-    RequestModel(MyBoatModel)
-    while not HasModelLoaded(MyBoatModel) do
+    RequestModel(myBoatModel)
+    while not HasModelLoaded(myBoatModel) do
         Wait(100)
     end
-    MyBoat = CreateVehicle(MyBoatModel, boatConfig.boatx, boatConfig.boaty, boatConfig.boatz, boatConfig.boath, true, false)
+    MyBoat = CreateVehicle(myBoatModel, boatConfig.boatx, boatConfig.boaty, boatConfig.boatz, boatConfig.boath, true, false)
     SetVehicleOnGroundProperly(MyBoat)
-    SetModelAsNoLongerNeeded(MyBoatModel)
+    SetModelAsNoLongerNeeded(myBoatModel)
     SetEntityInvincible(MyBoat, 1)
     DoScreenFadeOut(500)
     Wait(500)
@@ -440,7 +412,7 @@ RegisterNUICallback("LaunchBoat", function(data)
     DoScreenFadeIn(500)
     local boatBlip = Citizen.InvokeNative(0x23F74C2FDA6E7C61, -1749618580, MyBoat) -- BlipAddForEntity
     SetBlipSprite(boatBlip, GetHashKey("blip_canoe"), true)
-    Citizen.InvokeNative(0x9CB1A1623062F402, boatBlip, MyBoatName) -- SetBlipName
+    Citizen.InvokeNative(0x9CB1A1623062F402, boatBlip, myBoatName) -- SetBlipName
     IsBoating = true
     VORPcore.NotifyRightTip(_U("boatMenuTip"),4000)
 end)
@@ -448,16 +420,17 @@ end)
 RegisterNUICallback("SellBoat", function(data)
     DeleteEntity(MyBoat_entity)
 
-    local boatId = tonumber(data.boatID)
-    TriggerServerEvent('oss_boats:SellBoat', boatId, ShopId)
-    Wait(300)
+    local boatId = tonumber(data.BoatID)
+    local boatName = data.BoatName
+    TriggerServerEvent('oss_boats:SellBoat', boatId, boatName, ShopId)
+   --Wait(300)
 
-    SendNUIMessage({
-        action = "show",
-        shopData = getShopData(),
-        location = BoatShopName
-    })
-    TriggerServerEvent('oss_boats:GetMyBoats')
+    --SendNUIMessage({
+        --action = "show",
+        --shopData = getShopData(),
+        --location = BoatShopName
+   -- })
+    --TriggerServerEvent('oss_boats:GetMyBoats')
 end)
 
 RegisterNUICallback("CloseMenu", function()
@@ -531,41 +504,6 @@ function Rotation(dir)
     elseif shopBoat then
         local shopRot = GetEntityHeading(shopBoat) + dir
         SetEntityHeading(shopBoat, shopRot % 360)
-    end
-end
-
-function printTable(t)
-    local printTable_cache = {}
-    local function sub_printTable(t, indent)
-
-        if (printTable_cache[tostring(t)]) then
-            print(indent .. "*" .. tostring(t))
-        else
-            printTable_cache[tostring(t)] = true
-            if (type(t) == "table") then
-                for pos,val in pairs(t) do
-                    if (type(val) == "table") then
-                        print(indent .. "[" .. pos .. "] => " .. tostring(t).. " {")
-                        sub_printTable(val, indent .. string.rep(" ", string.len(pos)+8))
-                        print(indent .. string.rep(" ", string.len(pos)+6 ) .. "}")
-                    elseif (type(val) == "string") then
-                        print(indent .. "[" .. pos .. '] => "' .. val .. '"')
-                    else
-                        print(indent .. "[" .. pos .. "] => " .. tostring(val))
-                    end
-                end
-            else
-                print(indent..tostring(t))
-            end
-        end
-    end
-
-    if (type(t) == "table") then
-        print(tostring(t) .. " {")
-        sub_printTable(t, "  ")
-        print("}")
-    else
-        sub_printTable(t, "  ")
     end
 end
 
@@ -1025,3 +963,38 @@ AddEventHandler('onResourceStop', function(resourceName)
         end
     end
 end)
+
+function printTable(t)
+    local printTable_cache = {}
+    local function sub_printTable(t, indent)
+
+        if (printTable_cache[tostring(t)]) then
+            print(indent .. "*" .. tostring(t))
+        else
+            printTable_cache[tostring(t)] = true
+            if (type(t) == "table") then
+                for pos,val in pairs(t) do
+                    if (type(val) == "table") then
+                        print(indent .. "[" .. pos .. "] => " .. tostring(t).. " {")
+                        sub_printTable(val, indent .. string.rep(" ", string.len(pos)+8))
+                        print(indent .. string.rep(" ", string.len(pos)+6 ) .. "}")
+                    elseif (type(val) == "string") then
+                        print(indent .. "[" .. pos .. '] => "' .. val .. '"')
+                    else
+                        print(indent .. "[" .. pos .. "] => " .. tostring(val))
+                    end
+                end
+            else
+                print(indent..tostring(t))
+            end
+        end
+    end
+
+    if (type(t) == "table") then
+        print(tostring(t) .. " {")
+        sub_printTable(t, "  ")
+        print("}")
+    else
+        sub_printTable(t, "  ")
+    end
+end

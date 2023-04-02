@@ -21,7 +21,6 @@ Locales["en_lang"] = {
     sellBoat = "Sell Boat",
     sellFor = "Sell for: ",
     sold = "You sold a ~o~",
-    frcash = "~q~ for ~t6~$",
     frcash2 = " for $",
     ofgold = "~t4~ gold",
     ofgold2 = " gold",
@@ -44,5 +43,6 @@ Locales["en_lang"] = {
     your = "Your ~o~",
     boatLimit = "You can have a maximum of ~o~",
     boats = "~q~ boats!",
-    soldBoat = "You sold a boat for: $~t6~",
+    soldBoat = "You sold ~o~",
+    frcash = "~q~ for ~t6~$",
 }

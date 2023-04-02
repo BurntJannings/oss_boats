@@ -75,6 +75,7 @@ window.addEventListener('message', function(event) {
                     </div>
                     <div class="collapsible-body col s12 panel-myboat item" id="${boatID}">
                         <button class="col s6 panel-col item-myboat" onclick="Select(${boatID})">Select</button>
+                        <button class="col s6 panel-col item-myboat" onclick="Launch(${boatID}, '${boatModel}', '${boatName}')">Launch</button>
                         <button class="col s6 panel-col item-myboat" onclick="Sell(${boatID})">Sell</button>
                     </div>
                 </li>
@@ -120,8 +121,8 @@ function Select(IdBoat) {
     $.post('http://oss_boats/SelectBoat', JSON.stringify({ boatID: IdBoat }));
 };
 
-function Launch() {    
-    $.post('http://oss_boats/LaunchBoat');
+function Launch(boatID, boatModel, boatName) {    
+    $.post('http://oss_boats/LaunchBoat', JSON.stringify({ BoatID: boatID, BoatModel: boatModel, BoatName: boatName }));
     $('#page_myboats .scroll-container .collapsible').html('');
     $('#page_shop .scroll-container .collapsible').html('');
     $("#creatormenu").fadeOut(1000);

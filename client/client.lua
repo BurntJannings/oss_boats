@@ -25,7 +25,7 @@ local IsBoating = false
 local isAnchored
 --local OwnedData = {}
 local MyBoat
---local MyBoatId
+local MyBoatId
 local MyBoatModel
 local MyBoatName
 local ShopId
@@ -403,7 +403,7 @@ RegisterNUICallback("LoadMyBoat", function(data)
 end)
 
 RegisterNUICallback("SelectBoat", function(data)
-    TriggerServerEvent('oss_boats:GetBoatInfo', tonumber(data.boatID))
+    --TriggerServerEvent('oss_boats:GetBoatInfo', tonumber(data.boatID))
 end)
 
 RegisterNetEvent('oss_boats:SetBoatInfo')
@@ -412,10 +412,17 @@ AddEventHandler('oss_boats:SetBoatInfo', function(model, name)
     MyBoatName = name
 end)
 
-RegisterNUICallback("LaunchBoat", function()
+RegisterNUICallback("LaunchBoat", function(data)
+    print("Enter Launch")
     if MyBoat then
         DeleteEntity(MyBoat)
     end
+    MyBoatId = data.BoatID
+    MyBoatModel = data.BoatModel
+    MyBoatName = data.BoatName
+    print(MyBoatId)
+    print(MyBoatModel)
+    print(MyBoatName)
     local player = PlayerPedId()
     local boatConfig = Config.boatShops[ShopId]
     RequestModel(MyBoatModel)

@@ -11,7 +11,6 @@ local ReturnPrompt1 = GetRandomIntInRange(0, 0xffffff)
 local ReturnPrompt2 = GetRandomIntInRange(0, 0xffffff)
 -- End Prompts
 
-local SpawnPoint = {}
 local BoatShopName
 local ShowroomBoat_entity
 local MyBoat_entity
@@ -22,6 +21,7 @@ local JobGrade
 local InMenu = false
 local IsBoating = false
 local isAnchored
+local BoatCam
 local ShopId
 MenuData = {}
 
@@ -64,7 +64,7 @@ Citizen.CreateThread(function()
                             end
                         end
                             if Config.boatShops[shopId].BlipHandle then
-                                Citizen.InvokeNative(0x662D364ABF16DE2F, Config.boatShops[shopId].BlipHandle, GetHashKey(shopConfig.blipColorClosed)) -- BlipAddModifier
+                                Citizen.InvokeNative(0x662D364ABF16DE2F, Config.boatShops[shopId].BlipHandle, shKey(shopConfig.blipColorClosed)) -- BlipAddModifier
                             end
                             if shopConfig.NPC then
                                 DeleteEntity(shopConfig.NPC)
@@ -73,8 +73,8 @@ Citizen.CreateThread(function()
                                 shopConfig.NPC = nil
                         end
                         local coordsDist = vector3(coords.x, coords.y, coords.z)
-                        local coordsShop = vector3(shopConfig.npcx, shopConfig.npcy, shopConfig.npcz)
-                        local coordsBoat = vector3(shopConfig.boatx, shopConfig.boaty, shopConfig.boatz)
+                        local coordsShop = vector3(shopConfig.npc.x, shopConfig.npc.y, shopConfig.npc.z)
+                        local coordsBoat = vector3(shopConfig.spawn.x, shopConfig.spawn.y, shopConfig.spawn.z)
                         local distanceShop = #(coordsDist - coordsShop)
                         local distanceBoat = #(coordsDist - coordsBoat)
 
@@ -109,11 +109,11 @@ Citizen.CreateThread(function()
                         end
                         if not next(shopConfig.allowedJobs) then
                             if Config.boatShops[shopId].BlipHandle then
-                                Citizen.InvokeNative(0x662D364ABF16DE2F, Config.boatShops[shopId].BlipHandle, GetHashKey(shopConfig.blipColorOpen)) -- BlipAddModifier
+                                Citizen.InvokeNative(0x662D364ABF16DE2F, Config.boatShops[shopId].BlipHandle, joaat(shopConfig.blipColorOpen)) -- BlipAddModifier
                             end
                             local coordsDist = vector3(coords.x, coords.y, coords.z)
-                            local coordsShop = vector3(shopConfig.npcx, shopConfig.npcy, shopConfig.npcz)
-                            local coordsBoat = vector3(shopConfig.boatx, shopConfig.boaty, shopConfig.boatz)
+                            local coordsShop = vector3(shopConfig.npc.x, shopConfig.npc.y, shopConfig.npc.z)
+                            local coordsBoat = vector3(shopConfig.spawn.x, shopConfig.spawn.y, shopConfig.spawn.z)
                             local distanceShop = #(coordsDist - coordsShop)
                             local distanceBoat = #(coordsDist - coordsBoat)
 
@@ -141,11 +141,11 @@ Citizen.CreateThread(function()
                         else
                             -- Using Shop Hours - Shop Open - Job Locked
                             if Config.boatShops[shopId].BlipHandle then
-                                Citizen.InvokeNative(0x662D364ABF16DE2F, Config.boatShops[shopId].BlipHandle, GetHashKey(shopConfig.blipColorJob)) -- BlipAddModifier
+                                Citizen.InvokeNative(0x662D364ABF16DE2F, Config.boatShops[shopId].BlipHandle, joaat(shopConfig.blipColorJob)) -- BlipAddModifier
                             end
                             local coordsDist = vector3(coords.x, coords.y, coords.z)
-                            local coordsShop = vector3(shopConfig.npcx, shopConfig.npcy, shopConfig.npcz)
-                            local coordsBoat = vector3(shopConfig.boatx, shopConfig.boaty, shopConfig.boatz)
+                            local coordsShop = vector3(shopConfig.npc.x, shopConfig.npc.y, shopConfig.npc.z)
+                            local coordsBoat = vector3(shopConfig.spawn.x, shopConfig.spawn.y, shopConfig.spawn.z)
                             local distanceShop = #(coordsDist - coordsShop)
                             local distanceBoat = #(coordsDist - coordsBoat)
 
@@ -196,11 +196,11 @@ Citizen.CreateThread(function()
                     end
                     if not next(shopConfig.allowedJobs) then
                         if Config.boatShops[shopId].BlipHandle then
-                            Citizen.InvokeNative(0x662D364ABF16DE2F, Config.boatShops[shopId].BlipHandle, GetHashKey(shopConfig.blipColorOpen)) -- BlipAddModifier
+                            Citizen.InvokeNative(0x662D364ABF16DE2F, Config.boatShops[shopId].BlipHandle, joaat(shopConfig.blipColorOpen)) -- BlipAddModifier
                         end
                         local coordsDist = vector3(coords.x, coords.y, coords.z)
-                        local coordsShop = vector3(shopConfig.npcx, shopConfig.npcy, shopConfig.npcz)
-                        local coordsBoat = vector3(shopConfig.boatx, shopConfig.boaty, shopConfig.boatz)
+                        local coordsShop = vector3(shopConfig.npc.x, shopConfig.npc.y, shopConfig.npc.z)
+                        local coordsBoat = vector3(shopConfig.spawn.x, shopConfig.spawn.y, shopConfig.spawn.z)
                         local distanceShop = #(coordsDist - coordsShop)
                         local distanceBoat = #(coordsDist - coordsBoat)
 
@@ -228,11 +228,11 @@ Citizen.CreateThread(function()
                     else
                         -- -- Not Using Shop Hours - Shop Always Open - Job Locked
                         if Config.boatShops[shopId].BlipHandle then
-                            Citizen.InvokeNative(0x662D364ABF16DE2F, Config.boatShops[shopId].BlipHandle, GetHashKey(shopConfig.blipColorJob)) -- BlipAddModifier
+                            Citizen.InvokeNative(0x662D364ABF16DE2F, Config.boatShops[shopId].BlipHandle, joaat(shopConfig.blipColorJob)) -- BlipAddModifier
                         end
                         local coordsDist = vector3(coords.x, coords.y, coords.z)
-                        local coordsShop = vector3(shopConfig.npcx, shopConfig.npcy, shopConfig.npcz)
-                        local coordsBoat = vector3(shopConfig.boatx, shopConfig.boaty, shopConfig.boatz)
+                        local coordsShop = vector3(shopConfig.npc.x, shopConfig.npc.y, shopConfig.npc.z)
+                        local coordsBoat = vector3(shopConfig.spawn.x, shopConfig.spawn.y, shopConfig.spawn.z)
                         local distanceShop = #(coordsDist - coordsShop)
                         local distanceBoat = #(coordsDist - coordsBoat)
 
@@ -284,7 +284,6 @@ function OpenMenu(shopId)
     ShopId = shopId
     local shopConfig = Config.boatShops[ShopId]
     BoatShopName = shopConfig.shopName
-    SpawnPoint = {x = shopConfig.boatx, y = shopConfig.boaty, z = shopConfig.boatz, h = shopConfig.boath}
     CreateCamera()
 
     SendNUIMessage({
@@ -317,7 +316,7 @@ RegisterNUICallback("LoadBoat", function(data)
     end
 
     local boatModel = data.boatModel
-    local modelHash = GetHashKey(boatModel)
+    local modelHash = joaat(boatModel)
     if IsModelValid(modelHash) then
         if not HasModelLoaded(modelHash) then
             RequestModel(modelHash)
@@ -332,7 +331,13 @@ RegisterNUICallback("LoadBoat", function(data)
         ShowroomBoat_entity = nil
     end
 
-    ShowroomBoat_entity = CreateVehicle(modelHash, SpawnPoint.x, SpawnPoint.y, SpawnPoint.z, SpawnPoint.h, false, false)
+    if boatModel ~= "keelboat" then
+        SetCamFov(BoatCam, 50.0)
+    else
+        SetCamFov(BoatCam, 80.0)
+    end
+    local shopConfig = Config.boatShops[ShopId]
+    ShowroomBoat_entity = CreateVehicle(modelHash, shopConfig.spawn.x, shopConfig.spawn.y, shopConfig.spawn.z, shopConfig.spawn.h, false, false)
     Citizen.InvokeNative(0x7263332501E07F52, ShowroomBoat_entity, true) -- SetVehicleOnGroundProperly
     Citizen.InvokeNative(0x7D9EFB7AD6B19754, ShowroomBoat_entity, true) -- FreezeEntityPosition
 end)
@@ -387,7 +392,7 @@ RegisterNUICallback("LoadMyBoat", function(data)
     end
 
     local boatModel = data.BoatModel
-    local modelHash = GetHashKey(boatModel)
+    local modelHash = joaat(boatModel)
     if not HasModelLoaded(modelHash) then
         RequestModel(modelHash)
         while not HasModelLoaded(modelHash) do
@@ -395,7 +400,14 @@ RegisterNUICallback("LoadMyBoat", function(data)
         end
     end
 
-    MyBoat_entity = CreateVehicle(modelHash, SpawnPoint.x, SpawnPoint.y, SpawnPoint.z, SpawnPoint.h, false, false)
+    if boatModel ~= "keelboat" then
+        SetCamFov(BoatCam, 50.0)
+    else
+        SetCamFov(BoatCam, 80.0)
+    end
+
+    local shopConfig = Config.boatShops[ShopId]
+    MyBoat_entity = CreateVehicle(modelHash, shopConfig.spawn.x, shopConfig.spawn.y, shopConfig.spawn.z, shopConfig.spawn.h, false, false)
     Citizen.InvokeNative(0x7263332501E07F52, MyBoat_entity, true) -- SetVehicleOnGroundProperly
     Citizen.InvokeNative(0x7D9EFB7AD6B19754, MyBoat_entity, true) -- FreezeEntityPosition
 end)
@@ -415,7 +427,7 @@ RegisterNUICallback("LaunchBoat", function(data)
         Wait(100)
     end
 
-    MyBoat = CreateVehicle(myBoatModel, boatConfig.boatx, boatConfig.boaty, boatConfig.boatz, boatConfig.boath, true, false)
+    MyBoat = CreateVehicle(myBoatModel, boatConfig.spawn.x, boatConfig.spawn.y, boatConfig.spawn.z, boatConfig.spawn.h, true, false)
     SetVehicleOnGroundProperly(MyBoat)
     SetModelAsNoLongerNeeded(myBoatModel)
     SetEntityInvincible(MyBoat, 1)
@@ -426,7 +438,7 @@ RegisterNUICallback("LaunchBoat", function(data)
     DoScreenFadeIn(500)
 
     local boatBlip = Citizen.InvokeNative(0x23F74C2FDA6E7C61, -1749618580, MyBoat) -- BlipAddForEntity
-    SetBlipSprite(boatBlip, GetHashKey("blip_canoe"), true)
+    SetBlipSprite(boatBlip, joaat("blip_canoe"), true)
     Citizen.InvokeNative(0x9CB1A1623062F402, boatBlip, myBoatName) -- SetBlipName
     IsBoating = true
     VORPcore.NotifyRightTip(_U("boatMenuTip"),4000)
@@ -477,42 +489,6 @@ AddEventHandler('oss_boats:BoatMenu', function()
     })
     TriggerServerEvent('oss_boats:GetMyBoats')
 end)
-
--- Camera to View Boats
-function CreateCamera()
-    local shopConfig = Config.boatShops[ShopId]
-    local boatCam = CreateCam("DEFAULT_SCRIPTED_CAMERA", true)
-    SetCamCoord(boatCam, shopConfig.boatCamx, shopConfig.boatCamy, shopConfig.boatCamz + 1.2 )
-    SetCamActive(boatCam, true)
-    PointCamAtCoord(boatCam, SpawnPoint.x - 0.5, SpawnPoint.y, SpawnPoint.z)
-    DoScreenFadeOut(500)
-    Wait(500)
-    DoScreenFadeIn(500)
-    RenderScriptCams(true, false, 0, 0, 0)
-end
-
--- Rotate Boats while Viewing
-RegisterNUICallback("Rotate", function(data)
-    local direction = data.RotateBoat
-    if direction == "left" then
-        Rotation(20)
-    elseif direction == "right" then
-        Rotation(-20)
-    end
-end)
-
-function Rotation(dir)
-    local ownedBoat = MyBoat_entity
-    local shopBoat = ShowroomBoat_entity
-    if ownedBoat then
-        local ownedRot = GetEntityHeading(ownedBoat) + dir
-        SetEntityHeading(ownedBoat, ownedRot % 360)
-
-    elseif shopBoat then
-        local shopRot = GetEntityHeading(shopBoat) + dir
-        SetEntityHeading(shopBoat, shopRot % 360)
-    end
-end
 
 -- Boat Anchor Operation and Boat Return at Non-Shop Locations
 Citizen.CreateThread(function()
@@ -587,15 +563,50 @@ end
 function ReturnBoat(shopId)
     local player = PlayerPedId()
     local shopConfig = Config.boatShops[shopId]
-    local coords = vector3(shopConfig.playerx, shopConfig.playery, shopConfig.playerz)
     TaskLeaveVehicle(player, MyBoat, 0)
     DoScreenFadeOut(500)
     Wait(500)
-    SetEntityCoords(player, coords.x, coords.y, coords.z)
+    Citizen.InvokeNative(0x203BEFFDBE12E96A, player, shopConfig.player.x, shopConfig.player.y, shopConfig.player.z, shopConfig.player.h) -- SetEntityCoordsAndHeading
     Wait(500)
     DoScreenFadeIn(500)
     IsBoating = false
     DeleteEntity(MyBoat)
+end
+
+-- Camera to View Boats
+function CreateCamera()
+    local shopConfig = Config.boatShops[ShopId]
+    BoatCam = CreateCam("DEFAULT_SCRIPTED_CAMERA", true)
+    SetCamCoord(BoatCam, shopConfig.boatCam.x, shopConfig.boatCam.y, shopConfig.boatCam.z + 1.2 )
+    SetCamActive(BoatCam, true)
+    PointCamAtCoord(BoatCam, shopConfig.spawn.x, shopConfig.spawn.y, shopConfig.spawn.z)
+    DoScreenFadeOut(500)
+    Wait(500)
+    DoScreenFadeIn(500)
+    RenderScriptCams(true, false, 0, 0, 0)
+end
+
+-- Rotate Boats while Viewing
+RegisterNUICallback("Rotate", function(data)
+    local direction = data.RotateBoat
+    if direction == "left" then
+        Rotation(20)
+    elseif direction == "right" then
+        Rotation(-20)
+    end
+end)
+
+function Rotation(dir)
+    local ownedBoat = MyBoat_entity
+    local shopBoat = ShowroomBoat_entity
+    if ownedBoat then
+        local ownedRot = GetEntityHeading(ownedBoat) + dir
+        SetEntityHeading(ownedBoat, ownedRot % 360)
+
+    elseif shopBoat then
+        local shopRot = GetEntityHeading(shopBoat) + dir
+        SetEntityHeading(shopBoat, shopRot % 360)
+    end
 end
 
 -- Prevents Boat from Sinking
@@ -670,7 +681,7 @@ end
 function AddBlip(shopId)
     local shopConfig = Config.boatShops[shopId]
     if shopConfig.blipAllowed then
-        shopConfig.BlipHandle = N_0x554d9d53f696d002(1664425300, shopConfig.npcx, shopConfig.npcy, shopConfig.npcz) -- BlipAddForCoords
+        shopConfig.BlipHandle = N_0x554d9d53f696d002(1664425300, shopConfig.npc.x, shopConfig.npc.y, shopConfig.npc.z) -- BlipAddForCoords
         SetBlipSprite(shopConfig.BlipHandle, shopConfig.blipSprite, 1)
         SetBlipScale(shopConfig.BlipHandle, 0.2)
         Citizen.InvokeNative(0x9CB1A1623062F402, shopConfig.BlipHandle, shopConfig.blipName) -- SetBlipName
@@ -682,7 +693,7 @@ function SpawnNPC(shopId)
     local shopConfig = Config.boatShops[shopId]
     LoadModel(shopConfig.npcModel)
     if shopConfig.npcAllowed then
-        local npc = CreatePed(shopConfig.npcModel, shopConfig.npcx, shopConfig.npcy, shopConfig.npcz, shopConfig.npch, false, true, true, true)
+        local npc = CreatePed(shopConfig.npcModel, shopConfig.npc.x, shopConfig.npc.y, shopConfig.npc.z, shopConfig.npc.h, false, true, true, true)
         Citizen.InvokeNative(0x283978A15512B2FE, npc, true) -- SetRandomOutfitVariation
         SetEntityCanBeDamaged(npc, false)
         SetEntityInvincible(npc, true)
@@ -694,7 +705,7 @@ function SpawnNPC(shopId)
 end
 
 function LoadModel(npcModel)
-    local model = GetHashKey(npcModel)
+    local model = joaat(npcModel)
     RequestModel(model)
     while not HasModelLoaded(model) do
         RequestModel(model)

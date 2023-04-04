@@ -32,10 +32,10 @@ Config.boatShops = {
         blipColorOpen = "BLIP_MODIFIER_MP_COLOR_32", -- Shop Open - Default: White - Blip Colors Shown Below
         blipColorClosed = "BLIP_MODIFIER_MP_COLOR_10", -- Shop Closed - Default: Red - Blip Colors Shown Below
         blipColorJob = "BLIP_MODIFIER_MP_COLOR_23", -- Shop Job Locked - Default: Yellow - Blip Colors Shown Below
-        npcx = 2123.95, npcy = -551.63, npcz = 41.53, npch = 113.62, -- Blip and NPC Positions
-        boatx = 2122.8, boaty = -544.76, boatz = 40.55, boath = 46.69, -- Boat Spawn and Return Positions
-        playerx = 2121.31, playery = -552.65, playerz = 42.7, playerh = 316.34, -- Player Return Teleport Position
-        boatCamx = 2123.95, boatCamy = -551.63, boatCamz = 41.53, -- Camera Location to View Boat When In-Menu
+        npc = {x = 2123.95, y = -551.63, z = 41.53, h = 113.62}, -- Blip and NPC Positions
+        spawn = {x = 2131.6, y = -543.66, z = 40.73, h = 46.62}, -- Boat Spawn and Return Positions
+        player = {x = 2122.87, y = -551.68, z = 42.52, h = 284.48}, -- Player Return Teleport Position
+        boatCam = {x = 2122.92, y = -548.97, z = 42.46}, -- Camera Location to View Boat When In-Menu
         distanceShop = 2.0, -- Distance from NPC to Get Menu Prompt
         distanceReturn = 6.0, -- Distance from Shop to Get Return Prompt
         npcAllowed = true, -- Turns NPCs On / Off
@@ -74,10 +74,10 @@ Config.boatShops = {
         blipColorOpen = "BLIP_MODIFIER_MP_COLOR_32",
         blipColorClosed = "BLIP_MODIFIER_MP_COLOR_10",
         blipColorJob = "BLIP_MODIFIER_MP_COLOR_23",
-        npcx = 2949.77, npcy = -1250.18, npcz = 41.411, npch = 95.39,
-        boatx = 2947.50, boaty = -1257.21, boatz = 41.58, boath = 274.14,
-        playerx = 2946.99, playery = -1250.47, playerz = 42.41, playerh = 270.52,
-        boatCamx = 2949.77, boatCamy = -1250.18, boatCamz = 41.411,
+        npc = {x = 2949.77, y = -1250.18, z = 41.411, h = 95.39},
+        spawn = {x = 2953.50, y = -1260.21, z = 41.58, h = 274.14},
+        player = {x = 2948.28, y = -1250.32, z = 42.36, h = 283.74},
+        boatCam = {x = 2951.33, y = -1251.82, z = 42.44},
         distanceShop = 2.0,
         distanceReturn = 6.0,
         npcAllowed = true,
@@ -116,10 +116,10 @@ Config.boatShops = {
         blipColorOpen = "BLIP_MODIFIER_MP_COLOR_32",
         blipColorClosed = "BLIP_MODIFIER_MP_COLOR_10",
         blipColorJob = "BLIP_MODIFIER_MP_COLOR_23",
-        npcx = 3033.23, npcy = 1369.64, npcz = 41.62, npch = 67.42,
-        boatx = 3036.05, boaty = 1374.40, boatz = 40.27, boath = 251.0,
-        playerx = 3030.44, playery = 1370.84, playerz = 42.63, playerh = 244.6,
-        boatCamx = 3033.23, boatCamy = 1369.64, boatCamz = 41.62,
+        npc = {x = 3033.23, y = 1369.64, z = 41.62, h = 67.42},
+        spawn = {x = 3036.05, y = 1380.40, z = 40.27, h = 251.0},
+        player = {x = 3031.75, y = 1370.37, z = 42.57, h = 255.25},
+        boatCam = {x = 3033.01, y = 1371.53, z = 42.67},
         distanceShop = 2.0,
         distanceReturn = 6.0,
         npcAllowed = true,
@@ -158,10 +158,10 @@ Config.boatShops = {
         blipColorOpen = "BLIP_MODIFIER_MP_COLOR_32",
         blipColorClosed = "BLIP_MODIFIER_MP_COLOR_10",
         blipColorJob = "BLIP_MODIFIER_MP_COLOR_23",
-        npcx = -682.36, npcy = -1242.97, npcz = 42.11, npch = 88.90,
-        boatx = -682.22, boaty = -1252.50, boatz = 40.27, boath = 277.0,
-        playerx = -685.16, playery = -1242.98, playerz = 43.11, playerh = 266.15,
-        boatCamx = -683.17, boatCamy = -1245.29, boatCamz = 43.06,
+        npc = {x = -682.36, y = -1242.97, z = 42.11, h = 88.90},
+        spawn = {x = -682.22, y = -1254.50, z = 40.27, h = 277.0},
+        player = {x = -683.87, y = -1242.94, z = 43.06, h = 277.61},
+        boatCam = {x = -683.17, y = -1245.29, z = 43.06},
         distanceShop = 2.0,
         distanceReturn = 6.0,
         npcAllowed = true,
@@ -200,10 +200,10 @@ Config.boatShops = {
         blipColorOpen = "BLIP_MODIFIER_MP_COLOR_32",
         blipColorClosed = "BLIP_MODIFIER_MP_COLOR_10",
         blipColorJob = "BLIP_MODIFIER_MP_COLOR_23",
-        npcx = 614.46, npcy = 2209.5, npcz = 222.01, npch = 194.08,
-        boatx = 635.8, boaty = 2212.13, boatz = 220.78, boath = 212.13,
-        playerx = 614.14, playery = 2207.46, playerz = 223.06, playerh = 344.27,
-        boatCamx = 614.46, boatCamy = 2209.5, boatCamz = 222.01,
+        npc = {x = 614.46, y = 2209.5, z = 222.01, h = 194.08},
+        spawn = {x = 636.8, y = 2212.13, z = 220.78, h = 212.13},
+        player = {x = 614.47, y = 2207.97, z = 222.97, h = 5.61},
+        boatCam = {x = 625.05, y = 2211.25, z = 222.64},
         distanceShop = 2.0,
         distanceReturn = 6.0,
         npcAllowed = true,
@@ -242,10 +242,10 @@ Config.boatShops = {
         blipColorOpen = "BLIP_MODIFIER_MP_COLOR_32",
         blipColorClosed = "BLIP_MODIFIER_MP_COLOR_10",
         blipColorJob = "BLIP_MODIFIER_MP_COLOR_23",
-        npcx = -2017.76, npcy = -3048.91, npcz = -12.21, npch = 21.23,
-        boatx = -2025.37, boaty = -3048.24, boatz = -12.69, boath = 197.53,
-        playerx = -2018.88, playery = -3046.35, playerz = -11.21, playerh = 201.5,
-        boatCamx = -2017.76, boatCamy = -3048.91, boatCamz = -12.21,
+        npc = {x = -2017.76, y = -3048.91, z = -12.21, h = 21.23},
+        spawn = {x = -2030.37, y = -3048.24, z = -12.69, h = 197.53},
+        player = {x = -2018.32, y = -3047.83, z = -11.26, h = 205.54},
+        boatCam = {x = -2019.41, y = -3048.47, z = -11.25},
         distanceShop = 2.0,
         distanceReturn = 6.0,
         npcAllowed = true,

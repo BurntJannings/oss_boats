@@ -5,7 +5,7 @@ This is a boating script for RedM servers using the [VORP framework](https://git
 
 #### Features
 - Buy and sell boats through the boat shops
-- Cash or gold may be used for payments
+- Cash or gold may be used for payments in the menu
 - Shop hours may be set individually for each shop or disabled to allow the shop to remain open
 - Shop blips are colored and changeable per shop location
 - Blips can change color reflecting if shop is open, closed or job locked
@@ -29,10 +29,10 @@ Settings can be changed in the `config.lua` file. Here is an example of one shop
         blipColorOpen = "BLIP_MODIFIER_MP_COLOR_32", -- Shop Open - Default: White - Blip Colors Shown Below
         blipColorClosed = "BLIP_MODIFIER_MP_COLOR_10", -- Shop Closed - Default: Red - Blip Colors Shown Below
         blipColorJob = "BLIP_MODIFIER_MP_COLOR_23", -- Shop Job Locked - Default: Yellow - Blip Colors Shown Below
-        npcx = 2123.95, npcy = -551.63, npcz = 41.53, npch = 113.62, -- Blip and NPC Positions
-        boatx = 2122.8, boaty = -544.76, boatz = 40.55, boath = 46.69, -- Boat Spawn and Return Positions
-        playerx = 2121.31, playery = -552.65, playerz = 42.7, playerh = 316.34, -- Player Return Teleport Position
-        boatCamx = 2123.95, boatCamy = -551.63, boatCamz = 41.53, -- Camera Location to View Boat When In-Menu
+        npc = {x = 2123.95, y = -551.63, z = 41.53, h = 113.62}, -- Blip and NPC Positions
+        spawn = {x = 2131.6, y = -543.66, z = 40.73, h = 46.62}, -- Boat Spawn and Return Positions
+        player = {x = 2122.87, y = -551.68, z = 42.52, h = 284.48}, -- Player Return Teleport Position
+        boatCam = {x = 2122.92, y = -548.97, z = 42.46}, -- Camera Location to View Boat When In-Menu
         distanceShop = 2.0, -- Distance from NPC to Get Menu Prompt
         distanceReturn = 6.0, -- Distance from Shop to Get Return Prompt
         npcAllowed = true, -- Turns NPCs On / Off
@@ -76,9 +76,6 @@ Settings can be changed in the `config.lua` file. Here is an example of one shop
 
 #### Credits
 - kcrp_boats
-- vorp_stores
-- Hobbs
-- SavSin
 
 #### GitHub
 - https://github.com/JusCampin/oss_boats

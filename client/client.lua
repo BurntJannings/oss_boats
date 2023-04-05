@@ -1,6 +1,5 @@
 local VORPcore = {}
-
--- Start Prompts
+-- Prompts
 local OpenShops
 local CloseShops
 local OpenReturn
@@ -9,20 +8,21 @@ local ShopPrompt1 = GetRandomIntInRange(0, 0xffffff)
 local ShopPrompt2 = GetRandomIntInRange(0, 0xffffff)
 local ReturnPrompt1 = GetRandomIntInRange(0, 0xffffff)
 local ReturnPrompt2 = GetRandomIntInRange(0, 0xffffff)
--- End Prompts
-
+-- Jobs
+local PlayerJob
+local JobName
+local JobGrade
+-- Boats
 local BoatShopName
 local ShowroomBoat_entity
 local MyBoat_entity
 local MyBoat
-local PlayerJob
-local JobName
-local JobGrade
-local InMenu = false
 local IsBoating = false
 local isAnchored
 local BoatCam
 local ShopId
+--Menu
+local InMenu = false
 MenuData = {}
 
 TriggerEvent("getCore", function(core)
@@ -64,7 +64,7 @@ Citizen.CreateThread(function()
                             end
                         end
                             if Config.boatShops[shopId].BlipHandle then
-                                Citizen.InvokeNative(0x662D364ABF16DE2F, Config.boatShops[shopId].BlipHandle, shKey(shopConfig.blipColorClosed)) -- BlipAddModifier
+                                Citizen.InvokeNative(0x662D364ABF16DE2F, Config.boatShops[shopId].BlipHandle, joaat(shopConfig.blipColorClosed)) -- BlipAddModifier
                             end
                             if shopConfig.NPC then
                                 DeleteEntity(shopConfig.NPC)

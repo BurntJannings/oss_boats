@@ -288,7 +288,7 @@ function OpenMenu(shopId)
 
     SendNUIMessage({
         action = "show",
-        shopData = getShopData(),
+        shopData = GetShopData(),
         location = BoatShopName
     })
     SetNuiFocus(true, true)
@@ -296,7 +296,7 @@ function OpenMenu(shopId)
 end
 
 -- Get Boat Data for Purchases
-function getShopData()
+function GetShopData()
     local ret = Config.boatShops[ShopId].boats
     return ret
 end
@@ -369,7 +369,7 @@ AddEventHandler('oss_boats:SetBoatName', function(data)
 
             SendNUIMessage({
                 action = "show",
-                shopData = getShopData(),
+                shopData = GetShopData(),
                 location = BoatShopName
             })
             SetNuiFocus(true, true)
@@ -484,7 +484,7 @@ AddEventHandler('oss_boats:BoatMenu', function()
 
     SendNUIMessage({
         action = "show",
-        shopData = getShopData(),
+        shopData = GetShopData(),
         location = BoatShopName
     })
     TriggerServerEvent('oss_boats:GetMyBoats')

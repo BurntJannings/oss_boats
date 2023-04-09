@@ -274,6 +274,48 @@ Config.boatShops = {
                 ["keelboat"]       = { label = "Keelboat",      cashPrice = 800,  goldPrice = 40, sellPrice = 480, }
             }
         }
+    },
+    sisika = {
+        shopName = "Sisika Boats",
+        promptName = "Sisika Boats",
+        blipAllowed = true,
+        blipName = "Sisika Boats",
+        blipSprite = 2005921736,
+        blipColorOpen = "BLIP_MODIFIER_MP_COLOR_32",
+        blipColorClosed = "BLIP_MODIFIER_MP_COLOR_10",
+        blipColorJob = "BLIP_MODIFIER_MP_COLOR_23",
+        npc = {x = 3266.12, y = -716.04, z = 41.98, h = 274.85},
+        spawn = {x = 3252.1, y = -706.06, z = 41.93, h = 75.28},
+        player = {x = 3267.94, y = -715.9, z = 42.0, h = 101.39},
+        boatCam = {x = 3265.04, y = -715.53, z = 41.95},
+        distanceShop = 2.0,
+        distanceReturn = 6.0,
+        npcAllowed = true,
+        npcModel = "A_M_M_UniBoatCrew_01",
+        allowedJobs = {},
+        jobGrade = 0,
+        shopHours = false,
+        shopOpen = 7,
+        shopClose = 21,
+        boats = {
+            {
+                boatType = "Canoes",
+                ["canoetreetrunk"] = { label = "Dugout Canoe",  cashPrice = 25,   goldPrice = 1,  sellPrice = 15  },
+                ["canoe"]          = { label = "Canoe",         cashPrice = 45,   goldPrice = 2,  sellPrice = 25  },
+                ["pirogue"]        = { label = "Pirogue Canoe", cashPrice = 60,   goldPrice = 3,  sellPrice = 35  }
+            },
+            {
+                boatType = "Rowboats",
+                ["skiff"]          = { label = "Skiff",         cashPrice = 100,  goldPrice = 5,  sellPrice = 60  },
+                ["rowboat"]        = { label = "Rowboat",       cashPrice = 150,  goldPrice = 7,  sellPrice = 90  },
+                ["rowboatSwamp"]   = { label = "Swamp Rowboat", cashPrice = 125,  goldPrice = 6,  sellPrice = 75  }
+            },
+            {
+                boatType = "Steamboats",
+                ["boatsteam02x"]   = { label = "Steamboat",     cashPrice = 550,  goldPrice = 25, sellPrice = 330, },
+                ["keelboat"]       = { label = "Keelboat",      cashPrice = 800,  goldPrice = 40, sellPrice = 480, }
+            }
+        }
     }
 }
 

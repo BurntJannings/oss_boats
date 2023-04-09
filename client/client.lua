@@ -265,8 +265,10 @@ Citizen.CreateThread(function()
                             sleep = false
                             local returnOpen = CreateVarString(10, 'LITERAL_STRING', shopConfig.promptName)
                             PromptSetActiveGroupThisFrame(ReturnPrompt1, returnOpen)
+                            if Citizen.InvokeNative(0xC92AC953F0A982AE, OpenReturn) then -- UiPromptHasStandardModeCompleted
 
-                            ReturnBoat(shopId)
+                                ReturnBoat(shopId)
+                            end
                         end
                     end
                 end

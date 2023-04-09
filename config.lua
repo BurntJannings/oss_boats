@@ -284,7 +284,7 @@ Config.boatShops = {
         blipColorOpen = "BLIP_MODIFIER_MP_COLOR_32",
         blipColorClosed = "BLIP_MODIFIER_MP_COLOR_10",
         blipColorJob = "BLIP_MODIFIER_MP_COLOR_23",
-        npc = {x = 3266.12, y = -716.04, z = 41.98, h = 274.85},
+        npc = {x = 3266.12, y = -716.04, z = 40.98, h = 274.85},
         spawn = {x = 3252.1, y = -706.06, z = 41.93, h = 75.28},
         player = {x = 3267.94, y = -715.9, z = 42.0, h = 101.39},
         boatCam = {x = 3265.04, y = -715.53, z = 41.95},

@@ -6,6 +6,7 @@ This is a boating script for RedM servers using the [VORP framework](https://git
 #### Features
 - Buy and sell boats through the boat shops
 - Cash or gold may be used for payments in the menu
+- Individual inventory for owned boats
 - Shop hours may be set individually for each shop or disabled to allow the shop to remain open
 - Shop blips are colored and changeable per shop location
 - Blips can change color reflecting if shop is open, closed or job locked
@@ -16,6 +17,7 @@ This is a boating script for RedM servers using the [VORP framework](https://git
 - Boats can be driven across the map without sinking
 - Give your boat a special name at purchase time
 - Set a max number of boats per player in the config
+- Command: 'enterBoat' to be used in F8 console if unable to get back to the driving position
 
 #### Configuration
 Settings can be changed in the `config.lua` file. Here is an example of one shop:

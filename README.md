@@ -1,7 +1,7 @@
 # Boats v2
 
 #### Description
-This is a boating script for RedM servers using the [VORP framework](https://github.com/VORPCORE). Boats can be bought and sold through shops. There are 6 shops configured, more shop locations may be added using the `config.lua` file.
+This is a boating script for RedM servers using the [VORP framework](https://github.com/VORPCORE). Boats can be bought and sold through shops. There are 7 shops configured, more shop locations may be added using the `config.lua` file.
 
 #### Features
 - Buy and sell boats through the boat shops
@@ -68,6 +68,7 @@ Settings can be changed in the `config.lua` file. Here is an example of one shop
 
 #### Dependencies
 - [vorp_core](https://github.com/VORPCORE/vorp-core-lua)
+- [vorp_inventory](https://github.com/VORPCORE/vorp_inventory-lua)
 - [menuapi](https://github.com/outsider31000/menuapi)
 
 #### Installation

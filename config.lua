@@ -7,16 +7,19 @@ Config.defaultlang = "en_lang"
 Config.shopKey = 0x760A9C6F --[G]
 
 -- Open Boat Options Menu
-Config.optionKey = 0xF1301666 --[O] opens menu for anchor and remote return while in boat
+Config.optionKey = 0xF1301666 --[O] opens menu for anchor, inventory and remote return while in boat
 
 -- Return Boat to Shop at Prompt
 Config.returnKey = 0xD9D0E1C0 --[spacebar]
 
 -- Block NPC Boat Spawns
-Config.blockNpcBoats = true -- If true, will block the spawning of NPC boats
+Config.blockNpcBoats = false -- If true, will block the spawning of NPC boats
 
 -- Limit Number of Boats per Player
 Config.maxBoats = 8 -- Default: 8
+
+-- Number of Items Allowed in Boat Inventory
+Config.invLimit = 200 -- Default: 200
 
 -- Show or Remove Blip when Closed
 Config.blipAllowedClosed = true -- If true, will show colored blip when shop is closed

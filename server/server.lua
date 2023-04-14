@@ -1,7 +1,11 @@
 local VORPcore = {}
+local VORPInv = {}
+
 TriggerEvent("getCore", function(core)
     VORPcore = core
 end)
+
+VORPInv = exports.vorp_inventory:vorp_inventoryApi()
 
 -- Buy New Boats
 RegisterServerEvent('oss_boats:BuyBoat')
@@ -106,6 +110,21 @@ AddEventHandler('oss_boats:SellBoat', function(boatId, boatName, shopId)
         end
         TriggerClientEvent('oss_boats:BoatMenu', _source)
     end)
+end)
+
+-- Register Horse Inventory
+RegisterServerEvent('oss_boats:RegisterInventory')
+AddEventHandler('oss_boats:RegisterInventory', function(id)
+
+    VORPInv.registerInventory("boat_" .. tostring(id), _U("boatInv"), tonumber(Config.invLimit))
+end)
+
+-- Open Horse Inventory
+RegisterServerEvent('oss_boats:OpenInventory')
+AddEventHandler('oss_boats:OpenInventory', function(id)
+    local _source = source
+
+    VORPInv.OpenInv(_source, "boat_" .. tostring(id))
 end)
 
 -- Check Player Job and Job Grade

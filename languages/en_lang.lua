@@ -23,5 +23,9 @@ Locales["en_lang"] = {
     soldBoat = "You sold ~o~",
     frcash = "~q~ for ~t6~$",
     nameBoat = "Name your boat:",
-    boatSubMenu = " "
+    boatSubMenu = " ",
+    boatInv = "Storage Locker",
+    outOfRange = "You're too far away from the locker",
+    inventoryMenu = "Locker",
+    inventoryAction = "Open Storage Locker"
 }

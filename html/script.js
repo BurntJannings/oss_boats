@@ -64,7 +64,7 @@ window.addEventListener('message', function(event) {
         $('.collapsible').collapsible();
         for (const [ind, tab] of Object.entries(boatData)) {
             const boatName = tab.name;
-            const boatID = tab.id;
+            const boatId = tab.id;
             const boatModel = tab.model;
             $('#page_myboats .scroll-container .collapsible').append(`
                 <li>
@@ -73,10 +73,10 @@ window.addEventListener('message', function(event) {
                             <h6 class="grey-text plus">${boatName}</h6>
                         </div>
                     </div>
-                    <div class="collapsible-body col s12 panel-myboat item" id="${boatID}">
-                        <button class="col s4 panel-col item-myboat" onclick="Select(${boatID}, '${boatModel}')">Select</button>
-                        <button class="col s4 panel-col item-myboat" onclick="Launch(${boatID}, '${boatModel}', '${boatName}')">Launch</button>
-                        <button class="col s4 panel-col item-myboat" onclick="Sell(${boatID}, '${boatName}')">Sell</button>
+                    <div class="collapsible-body col s12 panel-myboat item" id="${boatId}">
+                        <button class="col s4 panel-col item-myboat" onclick="Select(${boatId}, '${boatModel}')">Select</button>
+                        <button class="col s4 panel-col item-myboat" onclick="Launch(${boatId}, '${boatModel}', '${boatName}')">Launch</button>
+                        <button class="col s4 panel-col item-myboat" onclick="Sell(${boatId}, '${boatName}')">Sell</button>
                     </div>
                 </li>
             `);
@@ -95,20 +95,20 @@ function BuyBoat(modelB, price, isCash) {
     };
 };
 
-function Select(boatID, boatModel) {    
-    $.post('http://oss_boats/LoadMyBoat', JSON.stringify({ BoatID: boatID, BoatModel: boatModel }));
+function Select(boatId, boatModel) {    
+    $.post('http://oss_boats/LoadMyBoat', JSON.stringify({ BoatId: boatId, BoatModel: boatModel }));
 };
 
-function Launch(boatID, boatModel, boatName) {    
-    $.post('http://oss_boats/LaunchBoat', JSON.stringify({ BoatID: boatID, BoatModel: boatModel, BoatName: boatName }));
+function Launch(boatId, boatModel, boatName) {    
+    $.post('http://oss_boats/LaunchBoat', JSON.stringify({ BoatId: boatId, BoatModel: boatModel, BoatName: boatName }));
     $('#page_myboats .scroll-container .collapsible').html('');
     $('#page_shop .scroll-container .collapsible').html('');
     $("#creatormenu").fadeOut(1000);
     CloseMenu()
 };
 
-function Sell(boatID, boatName) {    
-    $.post('http://oss_boats/SellBoat', JSON.stringify({ BoatID: boatID,  BoatName: boatName}));
+function Sell(boatId, boatName) {    
+    $.post('http://oss_boats/SellBoat', JSON.stringify({ BoatId: boatId,  BoatName: boatName}));
     $('#page_myboats .scroll-container .collapsible').html('');
     $('#page_shop .scroll-container .collapsible').html('');
     $("#creatormenu").fadeOut(1000);

@@ -462,7 +462,7 @@ end)
 RegisterNUICallback("SellBoat", function(data)
     DeleteEntity(MyBoat_entity)
 
-    local boatId = tonumber(data.BoatID)
+    local boatId = tonumber(data.BoatId)
     local boatName = data.BoatName
     TriggerServerEvent('oss_boats:SellBoat', boatId, boatName, ShopId)
 end)
